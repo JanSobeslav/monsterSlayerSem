@@ -681,6 +681,17 @@ class Merchant {
                 manaCost: 3000,
                 itemValue: 8000
             },
-        ]
+        ];
+        
+    }
+    najitPredmet(val) {
+        let index = -1;
+        let filteredObj = this.inventory.find(function(item, i){
+            if(item.name === val){
+                index = i;
+                return i;
+            }
+        });
+        return filteredObj;
     }
 }

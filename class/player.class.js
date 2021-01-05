@@ -8,6 +8,7 @@ class Player {
         this.minDam = minDam;
         this.maxDam = maxDam;
         this.gold = gold;
+        this.inventory = [];
     }
     upravitZivoty(hodnota, akce) {
         if (akce == true) {
@@ -37,7 +38,19 @@ class Player {
     utok() {
         return Math.floor(Math.random() * (this.maxDam - this.minDam + 1) ) + this.minDam;
     }
-    prodat() {
-        //vymaže položku z inventáře a spustí metodu upravitZlato() 
+    prodat(predmet) {
+        let index = -1;
+        let filteredObj = this.inventory.find(function(item, i){
+            if(item.name === predmet){
+                index = i;
+                return i;
+            }
+        });
+        this.inventory.slice(index, 1);
+        console.log('Položka '+filteredObj.name+' byla odstraněna!');
+    }
+    koupit(predmet) {
+
+        this.inventory.push(predmet);
     }
 }
