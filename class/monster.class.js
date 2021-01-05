@@ -1,10 +1,10 @@
 class Monster {
-    constructor(health, minDam, maxDam, weak, level) {
-        this.health = health;
-        this.minDam = minDam;
-        this.maxDam = maxDam;
-        this.weak = weak;
-        this.level = level;
+    constructor() {
+        this.health = 100;
+        this.minDam = 10;
+        this.maxDam = 20;
+        this.weak = 'sword';
+        this.level = 1;
     }
     upravitZivoty(hodnota, akce) {
         if (akce == true) {
@@ -18,8 +18,8 @@ class Monster {
     }
     obnoveni() {
         this.level++;
-        this.health = 100*(this.level/2);
+        this.health = 100*((this.level+1)/2);
         this.minDam += 2*this.level;
-        this.maxDam += 2*this.level;
+        this.maxDam += 2.5*this.level;
     }
 }
