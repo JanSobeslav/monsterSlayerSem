@@ -21,6 +21,7 @@
     font-weight: bold;
     text-shadow: -1px 0px 5px rgb(255, 4, 0);
     background-color: rgb(27, 27, 27);
+    cursor: pointer;
 }
 .menu button:hover {
     color: red;
