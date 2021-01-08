@@ -7,22 +7,35 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> --> <!-- instrukce pro W aplikace Edge, Explorer,... -->
-        <link href="css/img/favicon.png" rel="shorcut icon" type="image/png"> <!-- ikona -->
         <link rel="stylesheet" href="css/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <title>Lovec příšer</title>
     </head>
     <body>
-        <div class="canvas"> 
-            <h1>Monster slayer</h1>
-            <div class="menu">
-                
-                <button>NOVÁ HRA</button>
-                <button>NAČÍST HRU</button>
-                <button>Admin</button>
+        <div id="hra">
+            <div class="hlavniMenu"> 
+                <h1>Monster slayer</h1>
+                <div class="menu">
+                    <button id="nova">NOVÁ HRA</button>
+                    <button id="nacist">NAČÍST HRU</button>
+                    <button>Admin</button>
+                </div> 
             </div>
-            
-            
         </div>
-              
     </body>
 </html>
+<script>
+    $(document).ready(function(){
+        //NOVA HRA
+        $("#nova").click(function(){
+            console.log("Nová hra");
+            $("#hra").load("game.html"); 
+        });
+
+    });
+    
+</script>
+<script src="class/player.class.js"></script>
+<script src="class/monster.class.js"></script>
+<script src="class/merchant.class.js"></script>
+<script src="class/oracle.class.js"></script>

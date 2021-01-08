@@ -1,8 +1,9 @@
-.canvas {
+.hlavniMenu {
     height: 800px; 
     background-image: url('../assets/hlMenu.png');
     background-repeat: no-repeat; 
     background-position: left top;
+    background-attachment: fixed;
 }
 .menu {
     position: fixed;
