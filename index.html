@@ -16,9 +16,23 @@
             <div class="hlavniMenu"> 
                 <h1>Monster slayer</h1>
                 <div class="menu">
-                    <button id="nova">NOVÁ HRA</button>
+                    <button id="nova">NOVÁ HRA</button> 
                     <button id="nacist">NAČÍST HRU</button>
-                    <button>Admin</button>
+                    <!-- <button>Admin</button> -->
+                    <div id="novaHraForm">
+                        <input type="text" id="jmenoForm" name="jmenoForm" placeholder="Napiš jméno tvojí postavy!">
+                        <select name="rasa" id="vyberRasa">
+                            <option value="clovek">Člověk</option>
+                            <option value="trpaslik">Trpaslík</option>
+                            <option value="elf">Elf</option>
+                            <option value="carodej">Čaroděj</option>
+                        </select>
+                        <button id="ok">OK</button>
+                    </div>
+                    <div id="nacistHruForm">
+                           <p id="ulozText">Jméno hráče + datum + čas</p>
+                    </div>
+                   
                 </div> 
             </div>
         </div>
@@ -28,10 +42,20 @@
     $(document).ready(function(){
         //NOVA HRA
         $("#nova").click(function(){
-            console.log("Nová hra");
+            $("#novaHraForm").css("display", "grid"); 
+            $("#nacistHruForm").css("display", "none"); 
+        });
+        $("#ok").click(function(){
+            let jm = $("#jmenoForm").val();
+            let rs = $("#vyberRasa").val();
+            console.log("Nová hra; jméno: "+jm+" rasa: "+rs);
             $("#hra").load("game.html"); 
         });
-
+        //NAČÍST HRU
+        $("#nacist").click(function(){
+            $("#nacistHruForm").css("display", "grid"); 
+            $("#novaHraForm").css("display", "none"); 
+        });
     });
     
 </script>
