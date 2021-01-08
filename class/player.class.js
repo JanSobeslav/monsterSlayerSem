@@ -50,7 +50,6 @@ class Player {
         console.log('Položka '+filteredObj.name+' byla odstraněna!');
     }
     koupit(predmet) {
-
         this.inventory.push(predmet);
     }
 }
