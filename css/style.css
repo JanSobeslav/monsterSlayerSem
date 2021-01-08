@@ -33,3 +33,83 @@ h1 {
     text-decoration: overline;
     text-shadow: 8px 2px 6px rgb(255, 4, 0);
 }
+
+.hra {
+    height: 800px; 
+    background-image: url('../assets/hraPlan.png');
+    background-repeat: no-repeat; 
+    background-position: left top;
+    background-attachment: fixed;
+}
+#jmeno {
+    position: fixed;
+    left: 5%;
+    top: 8%;
+    font-size: 1.5em;
+}
+#rasa {
+    position: fixed;
+    left: 5%;
+    top: 18%;
+    font-size: 1.5em;
+}
+#zivot {
+    position: fixed;
+    left: 8%;
+    top: 24.5%;
+    font-size: 2em;
+    color: rgb(180, 0, 0);
+}
+#mana {
+    position: fixed;
+    left: 8%;
+    top: 31.5%;
+    font-size: 2em;
+    color: rgb(0, 126, 148);
+}
+#poskozeni {
+    position: fixed;
+    left: 8%;
+    top: 39.5%;
+    font-size: 2em;
+    color: rgb(51, 54, 54);
+}
+#zlato {
+    position: fixed;
+    left: 8%;
+    top: 59%;
+    font-size: 2em;
+    color: rgb(194, 155, 26);
+}
+#inventar {
+    position: fixed;
+    height: 40pt;
+    width: 40pt;
+    top: 54%;
+    left: 3.5%;
+    cursor: pointer;
+}
+#obchodnik {
+    position: fixed;
+    height: 120pt;
+    width: 100pt;
+    top: 25%;
+    left: 46%;
+    cursor: pointer;
+}
+#vestec {
+    position: fixed;
+    height: 120pt;
+    width: 100pt;
+    top: 35%;
+    left: 23%;
+    cursor: pointer;
+}
+#vyprava {
+    position: fixed;
+    height: 60pt;
+    width: 120pt;
+    top: 10%;
+    left: 35%;
+    cursor: grab;
+}
