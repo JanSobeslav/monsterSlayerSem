@@ -1,6 +1,5 @@
 class Player {
-    constructor(id, name, race, health, mana, minDam, maxDam, gold) {
-        this.id = id;
+    constructor(name, race, health, mana, minDam, maxDam, gold) {
         this.name = name;
         this.race = race;
         this.health = health;

@@ -40,6 +40,8 @@
 </html>
 <script>
     $(document).ready(function(){
+        let hrac;
+        let hraProbiha = false;
         //NOVA HRA
         $("#nova").click(function(){
             $("#novaHraForm").css("display", "grid"); 
@@ -48,16 +50,59 @@
         $("#ok").click(function(){
             let jm = $("#jmenoForm").val();
             let rs = $("#vyberRasa").val();
-            console.log("Nová hra; jméno: "+jm+" rasa: "+rs);
+            let zv, mn, zl;
+            switch(rs) {
+                case 'clovek':
+                    zv = 80;
+                    mn = 50;
+                    zl = 5;
+                    rs = "Člověk";
+                    break;
+                case 'trpaslik':
+                    zv = 100;
+                    mn = 30;
+                    zl = 10;
+                    rs = "Trpaslík";
+                    break;
+                case 'elf':
+                    zv = 100;
+                    mn = 60;
+                    zl = 0;
+                    rs = "Elf";
+                    break;
+                case 'carodej':
+                    zv = 70;
+                    mn = 100;
+                    zl = 5;
+                    rs = "Čaroděj";
+                    break;
+                }
+            hrac = new Player(jm, rs, zv, mn, 5, 10, zl);
+            console.log("Nová hra; jméno: "+hrac.name+" rasa: "+hrac.race+" zlato: "+hrac.gold);
             $("#hra").load("game.html"); 
+            hraProbiha = true;
+            setTimeout(function(){ hra(hraProbiha, hrac); }, 500);
         });
         //NAČÍST HRU
         $("#nacist").click(function(){
             $("#nacistHruForm").css("display", "grid"); 
             $("#novaHraForm").css("display", "none"); 
         });
+ 
     });
-    
+    //HRA
+    function hra(hraProbiha, hrac) {
+            console.log("HRA: "+hraProbiha);
+            if(hraProbiha === true) {
+                $("#jmeno").text(hrac.name); 
+                $("#rasa").text(hrac.race);
+                $("#zivot").text(hrac.health);
+                $("#mana").text(hrac.mana);
+                $("#poskozeni").text(hrac.minDam+"-"+hrac.maxDam);
+                $("#zlato").text(hrac.gold);
+            }
+            
+        }
 </script>
 <script src="class/player.class.js"></script>
 <script src="class/monster.class.js"></script>
