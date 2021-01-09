@@ -14,7 +14,7 @@
     <body>
         <div id="hra">
             <div class="hlavniMenu"> 
-                <h1>Monster slayer</h1>
+                <h1>Lovec příšer</h1>
                 <div class="menu">
                     <button id="nova">NOVÁ HRA</button> 
                     <button id="nacist">NAČÍST HRU</button>
@@ -41,6 +41,7 @@
 <script>
     $(document).ready(function(){
         let hrac;
+        let prisera;
         let hraProbiha = false;
         //NOVA HRA
         $("#nova").click(function(){
@@ -49,39 +50,44 @@
         });
         $("#ok").click(function(){
             let jm = $("#jmenoForm").val();
-            let rs = $("#vyberRasa").val();
-            let zv, mn, zl;
-            switch(rs) {
-                case 'clovek':
-                    zv = 80;
-                    mn = 50;
-                    zl = 5;
-                    rs = "Člověk";
-                    break;
-                case 'trpaslik':
-                    zv = 100;
-                    mn = 30;
-                    zl = 10;
-                    rs = "Trpaslík";
-                    break;
-                case 'elf':
-                    zv = 100;
-                    mn = 60;
-                    zl = 0;
-                    rs = "Elf";
-                    break;
-                case 'carodej':
-                    zv = 70;
-                    mn = 100;
-                    zl = 5;
-                    rs = "Čaroděj";
-                    break;
-                }
-            hrac = new Player(jm, rs, zv, mn, 5, 10, zl);
-            console.log("Nová hra; jméno: "+hrac.name+" rasa: "+hrac.race+" zlato: "+hrac.gold);
-            $("#hra").load("game.html"); 
-            hraProbiha = true;
-            setTimeout(function(){ hra(hraProbiha, hrac); }, 500);
+            if (jm != '') {
+                let rs = $("#vyberRasa").val();
+                let zv, mn, zl;
+                switch(rs) {
+                    case 'clovek':
+                        zv = 80;
+                        mn = 50;
+                        zl = 5;
+                        rs = "Člověk";
+                        break;
+                    case 'trpaslik':
+                        zv = 100;
+                        mn = 30;
+                        zl = 10;
+                        rs = "Trpaslík";
+                        break;
+                    case 'elf':
+                        zv = 100;
+                        mn = 60;
+                        zl = 0;
+                        rs = "Elf";
+                        break;
+                    case 'carodej':
+                        zv = 70;
+                        mn = 100;
+                        zl = 5;
+                        rs = "Čaroděj";
+                        break;
+                    }
+                hrac = new Player(jm, rs, zv, mn, 5, 10, zl);
+                prisera = new Monster();
+                console.log("Nová hra; jméno: "+hrac.name+" Příšera: "+prisera.weak);
+                $("#hra").load("game.html"); 
+                hraProbiha = true;
+                setTimeout(function(){ hra(hraProbiha, hrac); }, 500);
+            } else {
+                $("#jmenoForm").attr('placeholder', 'MUSÍTE VYPLNIT JMÉNO!!!');
+            }   
         });
         //NAČÍST HRU
         $("#nacist").click(function(){

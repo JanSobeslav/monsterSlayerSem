@@ -4,12 +4,12 @@
     background-image: url('../assets/hlMenu.png');
     background-repeat: no-repeat; 
     background-position: left top;
-    background-attachment: fixed;
+    background-attachment: scroll;
 }
 .menu {
-    position: fixed;
-    right: 80%;
-    top: 200px;
+    position: absolute;
+    left: 100pt;
+    top: 200pt;
     display: grid;
 }
 .menu button {
@@ -27,8 +27,8 @@
 }
 #novaHraForm {
     position: absolute;
-    left: 200%;
-    top: 15%;
+    left: 200pt;
+    top: 0pt;
     display: none;
 }
 input, select {
@@ -45,8 +45,8 @@ input, select {
     border: 3px solid black;
     height: 50pt;
     width: 200pt;
-    left: 200%;
-    top: 15%;
+    left: 200pt;
+    top: 0pt;
     cursor: pointer;
     display: none;
 }
@@ -58,9 +58,9 @@ input, select {
     font-weight: 700;
 }
 h1 {
-    position: fixed;
-    right: 60%;
-    top: 70px;
+    position: absolute;
+    left: 50pt;
+    top: 50pt;
     font-family: cursive;
     font-size: 70px;
     text-decoration: overline;
@@ -74,7 +74,7 @@ h1 {
     background-image: url('../assets/hraPlan.png');
     background-repeat: no-repeat; 
     background-position: left top;
-    background-attachment: fixed;
+    background-attachment: scroll;
 }
 #jmeno {
     position: absolute;
