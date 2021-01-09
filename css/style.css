@@ -77,81 +77,81 @@ h1 {
     background-attachment: fixed;
 }
 #jmeno {
-    position: fixed;
-    left: 5%;
-    top: 8%;
+    position: absolute;
+    left: 50pt;
+    top: 50pt;
     font-size: 1.5em;
 }
 #rasa {
-    position: fixed;
-    left: 5%;
-    top: 18%;
+    position: absolute;
+    left: 50pt;
+    top: 100pt;
     font-size: 1.5em;
 }
 #zivot {
-    position: fixed;
-    left: 8%;
-    top: 24.5%;
+    position: absolute;
+    left: 80pt;
+    top: 130pt;
     font-size: 2em;
     color: rgb(180, 0, 0);
 }
 #mana {
-    position: fixed;
-    left: 8%;
-    top: 31.5%;
+    position: absolute;
+    left: 80pt;
+    top: 165pt;
     font-size: 2em;
     color: rgb(0, 126, 148);
 }
 #poskozeni {
-    position: fixed;
-    left: 8%;
-    top: 39.5%;
+    position: absolute;
+    left: 80pt;
+    top: 210pt;
     font-size: 2em;
     color: rgb(51, 54, 54);
 }
 #zlato {
-    position: fixed;
-    left: 8%;
-    top: 59%;
+    position: absolute;
+    left: 80pt;
+    top: 305pt;
     font-size: 2em;
     color: rgb(194, 155, 26);
 }
 #inventar {
-    position: fixed;
+    position: absolute;
     height: 40pt;
     width: 40pt;
-    top: 54%;
-    left: 3.5%;
+    top: 280pt;
+    left: 35pt;
     cursor: pointer;
 }
 #obchodnik {
-    position: fixed;
+    position: absolute;
     height: 120pt;
     width: 100pt;
-    top: 25%;
-    left: 46%;
+    top: 135pt;
+    left: 460pt;
     cursor: pointer;
 }
 #vestec {
-    position: fixed;
+    position: absolute;
     height: 120pt;
     width: 100pt;
-    top: 35%;
-    left: 23%;
+    top: 205pt;
+    left: 230pt;
     cursor: pointer;
 }
 #vyprava {
-    position: fixed;
+    position: absolute;
     height: 60pt;
     width: 120pt;
-    top: 10%;
-    left: 35%;
+    top: 60pt;
+    left: 360pt;
     cursor: grab;
 }
 #konec {
-    position: fixed;
-    top: 66%;
-    left: 51%;
+    position: absolute;
+    top: 340pt;
+    left: 520pt;
     color: black;
     font-size: 20px;
     font-weight: bold;
@@ -159,9 +159,9 @@ h1 {
     background-color: rgb(27, 27, 27);
 }
 #ulozit {
-    position: fixed;
-    top: 66%;
-    left: 45%;
+    position: absolute;
+    top: 340pt;
+    left: 450pt;
     color: black;
     font-size: 20px;
     font-weight: bold;
