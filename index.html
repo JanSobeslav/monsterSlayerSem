@@ -46,7 +46,6 @@
     $(document).ready(function () {
         let hrac;
         let prisera;
-        let hraProbiha = false;
         //NOVA HRA
         $("#nova").click(function () {
             $("#novaHraForm").css("display", "grid");
@@ -87,8 +86,7 @@
                 prisera = new Monster();
                 console.log("Nová hra; jméno: " + hrac.name + " Příšera: " + prisera.weak);
                 $("#hra").load("game.html");
-                hraProbiha = true;
-                setTimeout(function () { hra(hraProbiha, hrac, prisera); }, 500);
+                setTimeout(function () { hra(hrac, prisera); }, 500);
             } else {
                 $("#jmenoForm").attr('placeholder', 'MUSÍTE VYPLNIT JMÉNO!!!');
             }
@@ -101,9 +99,7 @@
 
     });
     //HRA
-    function hra(hraProbiha, hrac, prisera) {
-        console.log("HRA: " + hraProbiha);
-        if (hraProbiha === true) {
+    function hra(hrac, prisera) {
             $("#jmeno").text(hrac.name);
             $("#rasa").text(hrac.race);
             $("#zivot").text(hrac.health);
@@ -119,7 +115,7 @@
             $("#konec").click(function(){
                 location.reload();
             });
-        }
+        
 
     }
     //BOJ
@@ -127,6 +123,8 @@
         obnovitStatus(hrac, prisera);
         //ÚTOK
         $("#utokBtn").click(function () {
+            $("#utokBtn").prop('disabled', true);
+            $("#kouzloBtn").prop('disabled', true);
             let poskozeniHrac = hrac.utok();
             let poskozeniPrisera = prisera.utok();
             $("#statusBoje").html(hrac.name + " zraňuje příšeru<br> poškozením " + poskozeniHrac);
@@ -134,18 +132,29 @@
             obnovitStatus(hrac, prisera);
             if (prisera.health <= 0) {
                 $("#statusBoje").html("Zabil jsi příšeru!<br> Získáváš " + (prisera.level * 5) + " zlata.");
-                setTimeout(function () { $("#hra").load("game.html"); }, 1000);
-
-                prisera.obnoveni();
+                setTimeout(function () { 
+                    $("#hra").load("game.html"); 
+                    setTimeout(function(){
+                        prisera.obnoveni();
+                        hrac.maxHealth = hrac.maxHealth*((prisera.level+1)/2); 
+                        hrac.upravitZivoty(hrac.maxHealth, true);
+                        hrac.upravitZlato((prisera.level * 5), true);
+                        hra(hrac, prisera);
+                    }, 100);
+                }, 5000); 
             }
             setTimeout(function () {
-                $("#statusBoje").html("Příšera zraňuje " + hrac.name + "<br> poškozením " + poskozeniPrisera);
-                hrac.upravitZivoty(poskozeniPrisera, false);
-                obnovitStatus(hrac, prisera);
-                if (hrac.health <= 0) {
-                    $("#statusBoje").html("Příšera tě zabila!<br> <small>Budeš přesměrován/a do hlavního menu</small>");
-                    setTimeout(function () { location.reload(); }, 8000);
+                if (prisera.health > 0) {
+                    $("#statusBoje").html("Příšera zraňuje " + hrac.name + "<br> poškozením " + poskozeniPrisera);
+                    hrac.upravitZivoty(poskozeniPrisera, false);
+                    obnovitStatus(hrac, prisera);
+                    if (hrac.health <= 0) {
+                        $("#statusBoje").html("Příšera tě zabila!<br> <small>Budeš přesměrován/a do hlavního menu</small>");
+                        setTimeout(function () { location.reload(); }, 6500);
+                    }
                 }
+                $("#utokBtn").prop('disabled', false);
+                $("#kouzloBtn").prop('disabled', false);
             }, 1500);
         });
 
@@ -154,7 +163,7 @@
         //hrac
         $("#jmeno").text(hrac.name);
         $("#rasa").text(hrac.race);
-        $("#zivot").text(hrac.health);
+        $("#zivot").text(hrac.health+"/"+hrac.maxHealth);
         $("#mana").text(hrac.mana);
         $("#poskozeni").text(hrac.minDam + "-" + hrac.maxDam);
         $("#zlato").text(hrac.gold);

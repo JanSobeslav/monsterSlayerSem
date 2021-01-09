@@ -3,6 +3,7 @@ class Player {
         this.name = name;
         this.race = race;
         this.health = health;
+        this.maxHealth = health;
         this.mana = mana;
         this.minDam = minDam;
         this.maxDam = maxDam;
@@ -12,6 +13,9 @@ class Player {
     upravitZivoty(hodnota, akce) {
         if (akce == true) {
             this.health += hodnota;
+            if (this.health > this.maxHealth) {
+                this.health = this.maxHealth;
+            }
         } else {
             this.health -= hodnota;
         }

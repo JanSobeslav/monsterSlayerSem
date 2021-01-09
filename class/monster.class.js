@@ -39,9 +39,12 @@ class Monster {
                 break;
             }
         this.level++;
-        this.health = 100*((this.level+1)/2);
+        this.health = 50*((this.level+1)/2);
         this.minDam += 2*this.level;
         this.maxDam += 2.5*this.level;
+        this.health.toFixed(0);
+        this.minDam.toFixed(0);
+        this.maxDam.toFixed(0);
 
     }
 }
