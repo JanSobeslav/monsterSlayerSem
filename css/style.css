@@ -15,15 +15,16 @@
 .menu button {
     padding: 5pt;
     margin: 5pt;
-    color: black;
+    color: rgb(51, 54, 54);
     font-size: 20px;
     font-weight: bold;
-    text-shadow: -1px 0px 5px rgb(255, 4, 0);
-    background-color: rgb(27, 27, 27);
+    background-color: rgb(190, 141, 76);
     cursor: pointer;
 }
 .menu button:hover {
-    color: red;
+    font-weight: 700;
+    color: rgb(151, 151, 151);
+    background-color: rgb(117, 89, 51);
 }
 #novaHraForm {
     position: absolute;
@@ -152,30 +153,31 @@ h1 {
     position: absolute;
     top: 340pt;
     left: 520pt;
-    color: black;
+    color: rgb(51, 54, 54);
     font-size: 20px;
     font-weight: bold;
-    text-shadow: -1px 0px 5px rgb(255, 4, 0);
-    background-color: rgb(27, 27, 27);
+    background-color: rgb(190, 141, 76);
+    cursor: pointer;
 }
 .hra #ulozit {
     position: absolute;
     top: 340pt;
     left: 450pt;
-    color: black;
+    color: rgb(51, 54, 54);
     font-size: 20px;
     font-weight: bold;
-    text-shadow: -1px 0px 5px rgb(255, 4, 0);
-    background-color: rgb(27, 27, 27);
+    background-color: rgb(190, 141, 76);
+    cursor: pointer;
 }
 .hra #konec:hover {
-    color: red;
-    cursor: pointer;
+    font-weight: 700;
+    color: rgb(151, 151, 151);
+    background-color: rgb(117, 89, 51);
 }
 .hra #ulozit:hover {
-    color: green;
-    cursor: pointer;
-}
+    font-weight: 700;
+    color: rgb(151, 151, 151);
+    background-color: rgb(117, 89, 51);}
 /* ------- HRA -------*/
 /* ------- BOJ -------*/
 .boj {
@@ -239,3 +241,59 @@ h1 {
     text-shadow: 0px 0px 8px black;
 }
 /* ------- BOJ -------*/
+/* ------- OBCHOD -------*/
+.obchod {
+    height: 800px; 
+    background-image: url('../assets/hraObchod.png');
+    background-repeat: no-repeat; 
+    background-position: left top;
+    background-attachment: scroll;
+}
+#meceSkupina {
+    position: absolute;
+    left: 340pt;
+    top: 60pt;
+}
+#sekerySkupina {
+    position: absolute;
+    left: 340pt;
+    top: 110pt;
+}
+#kyjeSkupina {
+    position: absolute;
+    left: 340pt;
+    top: 160pt;
+}
+#lukySkupina {
+    position: absolute;
+    left: 340pt;
+    top: 210pt;
+}
+#lektvarySkupina {
+    position: absolute;
+    left: 340pt;
+    top: 260pt;
+}
+#kouzlaSkupina {
+    position: absolute;
+    left: 340pt;
+    top: 310pt;
+}
+#mujInventar {
+    position: absolute;
+    left: 50pt;
+    top: 80pt;
+}
+.obchod p {margin-bottom: 2pt;}
+.obchod button {
+    font-weight: 700;
+    color: rgb(51, 54, 54);
+    background-color: rgb(190, 141, 76);
+    cursor: pointer;
+}
+.obchod button:hover {
+    font-weight: 700;
+    color: rgb(151, 151, 151);
+    background-color: rgb(117, 89, 51);
+}
+/* ------- OBCHOD -------*/

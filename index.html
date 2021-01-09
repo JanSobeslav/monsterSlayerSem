@@ -84,9 +84,11 @@
                 }
                 hrac = new Player(jm, rs, zv, mn, 5, 10, zl);
                 prisera = new Monster();
+                obchodnik = new Merchant();
+                obchodnik.vypsatMece();
                 console.log("Nová hra; jméno: " + hrac.name + " Příšera: " + prisera.weak);
                 $("#hra").load("game.html");
-                setTimeout(function () { hra(hrac, prisera); }, 500);
+                setTimeout(function () { hra(hrac, prisera, obchodnik); }, 500);
             } else {
                 $("#jmenoForm").attr('placeholder', 'MUSÍTE VYPLNIT JMÉNO!!!');
             }
@@ -99,21 +101,28 @@
 
     });
     //HRA
-    function hra(hrac, prisera) {
+    function hra(hrac, prisera, obchodnik) {
             $("#jmeno").text(hrac.name);
             $("#rasa").text(hrac.race);
             $("#zivot").text(hrac.health);
             $("#mana").text(hrac.mana);
             $("#poskozeni").text(hrac.minDam + "-" + hrac.maxDam);
             $("#zlato").text(hrac.gold);
-            //BOJ
+            //boj
             $("#vyprava").click(function () {
                 $("#hra").load("fight.html");
                 console.log("začíná boj");
                 setTimeout(function () { boj(hrac, prisera); }, 500);
             });
+            //konec
             $("#konec").click(function(){
                 location.reload();
+            });
+            //obchodník
+            $("#obchodnik").click(function(){
+                $("#hra").load("store.html");
+                console.log("u obchodnika");
+                setTimeout(function () { obchod(hrac, obchodnik); }, 500);
             });
         
 
@@ -171,6 +180,10 @@
         $("#urovenM").text(prisera.level);
         $("#zivotM").text(prisera.health);
         $("#poskozeniM").text(prisera.minDam + "-" + prisera.maxDam);
+    }
+    //OBCHODNIK
+    function obchod(hrac, obchodnik) {
+
     }
 </script>
 <script src="class/player.class.js"></script>

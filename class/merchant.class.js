@@ -694,4 +694,58 @@ class Merchant {
         });
         return filteredObj;
     }
+    vypsatMece(id){
+        $.each(this.inventory, function(index, value){
+            if (value.type === 'sword'){
+                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
+                $(id).append(opn);  
+            }
+            
+        });
+    }
+    vypsatSekery(id){
+        $.each(this.inventory, function(index, value){
+            if (value.type === 'axe'){
+                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
+                $(id).append(opn);  
+            }
+            
+        });
+    }
+    vypsatKyje(id){
+        $.each(this.inventory, function(index, value){
+            if (value.type === 'flail'){
+                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
+                $(id).append(opn);  
+            }
+            
+        });
+    }
+    vypsatLuky(id){
+        $.each(this.inventory, function(index, value){
+            if (value.type === 'bow'){
+                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
+                $(id).append(opn);  
+            }
+            
+        });
+    }
+    vypsatLektvary(id){
+        $.each(this.inventory, function(index, value){
+            if (value.type === 'mpotion' || 'hpotion'){
+                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.effect+")"+" Cena: "+value.itemValue+"</option>";
+                $(id).append(opn);  
+            }
+            
+        });
+    }
+    vypsatKouzla(id){
+        $.each(this.inventory, function(index, value){
+            if (value.type === 'fspell' || 'wspell'){
+                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Potřebná mana: "+value.manaCost+" Cena: "+value.itemValue+"</option>";
+                $(id).append(opn);  
+            }
+            
+        });
+    }
 }
