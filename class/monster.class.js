@@ -1,8 +1,8 @@
 class Monster {
     constructor() {
-        this.health = 100;
-        this.minDam = 10;
-        this.maxDam = 20;
+        this.health = 50;
+        this.minDam = 8;
+        this.maxDam = 13;
         this.weak = 'sword';
         this.level = 1;
     }

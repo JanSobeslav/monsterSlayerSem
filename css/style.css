@@ -111,12 +111,12 @@ h1 {
 }
 #zlato {
     position: absolute;
-    left: 80pt;
-    top: 305pt;
+    left: 85pt;
+    top: 302pt;
     font-size: 2em;
     color: rgb(194, 155, 26);
 }
-#inventar {
+.hra #inventar {
     position: absolute;
     height: 40pt;
     width: 40pt;
@@ -124,7 +124,7 @@ h1 {
     left: 35pt;
     cursor: pointer;
 }
-#obchodnik {
+.hra #obchodnik {
     position: absolute;
     height: 120pt;
     width: 100pt;
@@ -132,7 +132,7 @@ h1 {
     left: 460pt;
     cursor: pointer;
 }
-#vestec {
+.hra #vestec {
     position: absolute;
     height: 120pt;
     width: 100pt;
@@ -140,15 +140,15 @@ h1 {
     left: 230pt;
     cursor: pointer;
 }
-#vyprava {
+.hra #vyprava {
     position: absolute;
     height: 60pt;
     width: 120pt;
     top: 60pt;
     left: 360pt;
-    cursor: grab;
+    cursor: pointer;
 }
-#konec {
+.hra #konec {
     position: absolute;
     top: 340pt;
     left: 520pt;
@@ -158,7 +158,7 @@ h1 {
     text-shadow: -1px 0px 5px rgb(255, 4, 0);
     background-color: rgb(27, 27, 27);
 }
-#ulozit {
+.hra #ulozit {
     position: absolute;
     top: 340pt;
     left: 450pt;
@@ -168,12 +168,74 @@ h1 {
     text-shadow: -1px 0px 5px rgb(255, 4, 0);
     background-color: rgb(27, 27, 27);
 }
-#konec:hover {
+.hra #konec:hover {
     color: red;
     cursor: pointer;
 }
-#ulozit:hover {
+.hra #ulozit:hover {
     color: green;
     cursor: pointer;
 }
 /* ------- HRA -------*/
+/* ------- BOJ -------*/
+.boj {
+    height: 800px; 
+    background-image: url('../assets/hraBoj.png');
+    background-repeat: no-repeat; 
+    background-position: left top;
+    background-attachment: scroll;
+}
+#urovenM {
+    position: absolute;
+    left: 485pt;
+    top: 56pt;
+    font-size: 1.5em;
+}
+#zivotM {
+    position: absolute;
+    left: 426pt;
+    top: 80pt;
+    font-size: 2em;
+    color: rgb(180, 0, 0);
+}
+#poskozeniM {
+    position: absolute;
+    left: 426pt;
+    top: 120pt;
+    font-size: 2em;
+    color: rgb(51, 54, 54);
+}
+#utokBtn {
+    position: absolute;
+    left: 200pt;
+    top: 80pt;
+    font-size: 2em;
+    font-weight: 700;
+    background-color: firebrick;
+}
+#utokBtn:hover {
+    cursor: pointer;
+    background-color: darkred;
+}
+#kouzloBtn {
+    position: absolute;
+    left: 200pt;
+    top: 120pt;
+    font-size: 2em;
+    font-weight: 700;
+    background-color: dodgerblue;
+}
+#kouzloBtn:hover {
+    cursor: pointer;
+    background-color: mediumblue;
+}
+#statusBoje {
+    position: absolute;
+    left: 210pt;
+    top: 220pt;
+    font-size: 2em;
+    font-weight: 700;
+    color: firebrick;
+    text-shadow: 0px 0px 8px black;
+}
+/* ------- BOJ -------*/

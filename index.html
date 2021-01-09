@@ -1,59 +1,63 @@
 <!DOCTYPE html>
 <html lang="cs">
-    <head>
-        <meta charset="utf-8">
-        <meta name="keywords">
-        <meta name="generator">
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> --> <!-- instrukce pro W aplikace Edge, Explorer,... -->
-        <link rel="stylesheet" href="css/style.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <title>Lovec příšer</title>
-    </head>
-    <body>
-        <div id="hra">
-            <div class="hlavniMenu"> 
-                <h1>Lovec příšer</h1>
-                <div class="menu">
-                    <button id="nova">NOVÁ HRA</button> 
-                    <button id="nacist">NAČÍST HRU</button>
-                    <!-- <button>Admin</button> -->
-                    <div id="novaHraForm">
-                        <input type="text" id="jmenoForm" name="jmenoForm" placeholder="Napiš jméno tvojí postavy!">
-                        <select name="rasa" id="vyberRasa">
-                            <option value="clovek">Člověk</option>
-                            <option value="trpaslik">Trpaslík</option>
-                            <option value="elf">Elf</option>
-                            <option value="carodej">Čaroděj</option>
-                        </select>
-                        <button id="ok">OK</button>
-                    </div>
-                    <div id="nacistHruForm">
-                           <p id="ulozText">Jméno hráče + datum + čas</p>
-                    </div>
-                   
-                </div> 
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords">
+    <meta name="generator">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <!-- instrukce pro W aplikace Edge, Explorer,... -->
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Lovec příšer</title>
+</head>
+
+<body>
+    <div id="hra">
+        <div class="hlavniMenu">
+            <h1>Lovec příšer</h1>
+            <div class="menu">
+                <button id="nova">NOVÁ HRA</button>
+                <button id="nacist">NAČÍST HRU</button>
+                <!-- <button>Admin</button> -->
+                <div id="novaHraForm">
+                    <input type="text" id="jmenoForm" name="jmenoForm" placeholder="Napiš jméno tvojí postavy!">
+                    <select name="rasa" id="vyberRasa">
+                        <option value="clovek">Člověk</option>
+                        <option value="trpaslik">Trpaslík</option>
+                        <option value="elf">Elf</option>
+                        <option value="carodej">Čaroděj</option>
+                    </select>
+                    <button id="ok">OK</button>
+                </div>
+                <div id="nacistHruForm">
+                    <p id="ulozText">Jméno hráče + datum + čas</p>
+                </div>
+
             </div>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         let hrac;
         let prisera;
         let hraProbiha = false;
         //NOVA HRA
-        $("#nova").click(function(){
-            $("#novaHraForm").css("display", "grid"); 
-            $("#nacistHruForm").css("display", "none"); 
+        $("#nova").click(function () {
+            $("#novaHraForm").css("display", "grid");
+            $("#nacistHruForm").css("display", "none");
         });
-        $("#ok").click(function(){
+        $("#ok").click(function () {
             let jm = $("#jmenoForm").val();
             if (jm != '') {
                 let rs = $("#vyberRasa").val();
                 let zv, mn, zl;
-                switch(rs) {
+                switch (rs) {
                     case 'clovek':
                         zv = 80;
                         mn = 50;
@@ -78,37 +82,87 @@
                         zl = 5;
                         rs = "Čaroděj";
                         break;
-                    }
+                }
                 hrac = new Player(jm, rs, zv, mn, 5, 10, zl);
                 prisera = new Monster();
-                console.log("Nová hra; jméno: "+hrac.name+" Příšera: "+prisera.weak);
-                $("#hra").load("game.html"); 
+                console.log("Nová hra; jméno: " + hrac.name + " Příšera: " + prisera.weak);
+                $("#hra").load("game.html");
                 hraProbiha = true;
-                setTimeout(function(){ hra(hraProbiha, hrac); }, 500);
+                setTimeout(function () { hra(hraProbiha, hrac, prisera); }, 500);
             } else {
                 $("#jmenoForm").attr('placeholder', 'MUSÍTE VYPLNIT JMÉNO!!!');
-            }   
+            }
         });
         //NAČÍST HRU
-        $("#nacist").click(function(){
-            $("#nacistHruForm").css("display", "grid"); 
-            $("#novaHraForm").css("display", "none"); 
+        $("#nacist").click(function () {
+            $("#nacistHruForm").css("display", "grid");
+            $("#novaHraForm").css("display", "none");
         });
- 
+
     });
     //HRA
-    function hra(hraProbiha, hrac) {
-            console.log("HRA: "+hraProbiha);
-            if(hraProbiha === true) {
-                $("#jmeno").text(hrac.name); 
-                $("#rasa").text(hrac.race);
-                $("#zivot").text(hrac.health);
-                $("#mana").text(hrac.mana);
-                $("#poskozeni").text(hrac.minDam+"-"+hrac.maxDam);
-                $("#zlato").text(hrac.gold);
-            }
-            
+    function hra(hraProbiha, hrac, prisera) {
+        console.log("HRA: " + hraProbiha);
+        if (hraProbiha === true) {
+            $("#jmeno").text(hrac.name);
+            $("#rasa").text(hrac.race);
+            $("#zivot").text(hrac.health);
+            $("#mana").text(hrac.mana);
+            $("#poskozeni").text(hrac.minDam + "-" + hrac.maxDam);
+            $("#zlato").text(hrac.gold);
+            //BOJ
+            $("#vyprava").click(function () {
+                $("#hra").load("fight.html");
+                console.log("začíná boj");
+                setTimeout(function () { boj(hrac, prisera); }, 500);
+            });
+            $("#konec").click(function(){
+                location.reload();
+            });
         }
+
+    }
+    //BOJ
+    function boj(hrac, prisera) {
+        obnovitStatus(hrac, prisera);
+        //ÚTOK
+        $("#utokBtn").click(function () {
+            let poskozeniHrac = hrac.utok();
+            let poskozeniPrisera = prisera.utok();
+            $("#statusBoje").html(hrac.name + " zraňuje příšeru<br> poškozením " + poskozeniHrac);
+            prisera.upravitZivoty(poskozeniHrac, false);
+            obnovitStatus(hrac, prisera);
+            if (prisera.health <= 0) {
+                $("#statusBoje").html("Zabil jsi příšeru!<br> Získáváš " + (prisera.level * 5) + " zlata.");
+                setTimeout(function () { $("#hra").load("game.html"); }, 1000);
+
+                prisera.obnoveni();
+            }
+            setTimeout(function () {
+                $("#statusBoje").html("Příšera zraňuje " + hrac.name + "<br> poškozením " + poskozeniPrisera);
+                hrac.upravitZivoty(poskozeniPrisera, false);
+                obnovitStatus(hrac, prisera);
+                if (hrac.health <= 0) {
+                    $("#statusBoje").html("Příšera tě zabila!<br> <small>Budeš přesměrován/a do hlavního menu</small>");
+                    setTimeout(function () { location.reload(); }, 8000);
+                }
+            }, 1500);
+        });
+
+    }
+    function obnovitStatus(hrac, prisera) {
+        //hrac
+        $("#jmeno").text(hrac.name);
+        $("#rasa").text(hrac.race);
+        $("#zivot").text(hrac.health);
+        $("#mana").text(hrac.mana);
+        $("#poskozeni").text(hrac.minDam + "-" + hrac.maxDam);
+        $("#zlato").text(hrac.gold);
+        //prisera
+        $("#urovenM").text(prisera.level);
+        $("#zivotM").text(prisera.health);
+        $("#poskozeniM").text(prisera.minDam + "-" + prisera.maxDam);
+    }
 </script>
 <script src="class/player.class.js"></script>
 <script src="class/monster.class.js"></script>
