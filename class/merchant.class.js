@@ -554,49 +554,49 @@ class Merchant {
             //LEKTVARY
             {
                 name: 'Malý lektvar zdraví',
-                type: 'hpotion',
+                type: 'potion',
                 effect: 10,
                 itemValue: 50
             },
             {
                 name: 'Střední lektvar zdraví',
-                type: 'hpotion',
+                type: 'potion',
                 effect: 50,
                 itemValue: 150
             },
             {
                 name: 'Velký lektvar zdraví',
-                type: 'hpotion',
+                type: 'potion',
                 effect: 200,
                 itemValue: 500
             },
             {
                 name: 'Lektvar života',
-                type: 'hpotion',
+                type: 'potion',
                 effect: 1000,
                 itemValue: 2000
             },
             {
                 name: 'Malý lektvar many',
-                type: 'mpotion',
+                type: 'potion',
                 effect: 10,
                 itemValue: 30
             },
             {
                 name: 'Střední lektvar many',
-                type: 'mpotion',
+                type: 'potion',
                 effect: 50,
                 itemValue: 90
             },
             {
                 name: 'Velký lektvar many',
-                type: 'mpotion',
+                type: 'potion',
                 effect: 200,
                 itemValue: 250
             },
             {
                 name: 'Lektvar magické síly',
-                type: 'mpotion',
+                type: 'potion',
                 effect: 1000,
                 itemValue: 1500
             },
@@ -685,64 +685,83 @@ class Merchant {
         
     }
     najitPredmet(val) {
-        let index = -1;
-        let filteredObj = this.inventory.find(function(item, i){
-            if(item.name === val){
-                index = i;
-                return i;
+        // let filteredObj = this.inventory.find(function(item, i){
+        //     if(item.name === val){
+        //         return i;
+        //     }
+        // });
+        // return filteredObj;
+        let predmet;
+        $.each(this.inventory, function(index, value){
+            if (value.name === val){
+                predmet = value;
             }
+            
         });
-        return filteredObj;
+        return predmet;
     }
     vypsatMece(id){
+        $(id).empty();
         $.each(this.inventory, function(index, value){
             if (value.type === 'sword'){
-                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
+                let opn = "<option value='"+value.name+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
                 $(id).append(opn);  
             }
             
         });
     }
     vypsatSekery(id){
+        $(id).empty();
         $.each(this.inventory, function(index, value){
             if (value.type === 'axe'){
-                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
+                let opn = "<option value='"+value.name+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
                 $(id).append(opn);  
             }
             
         });
     }
     vypsatKyje(id){
+        $(id).empty();
         $.each(this.inventory, function(index, value){
             if (value.type === 'flail'){
-                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
+                let opn = "<option value='"+value.name+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
                 $(id).append(opn);  
             }
             
         });
     }
     vypsatLuky(id){
+        $(id).empty();
         $.each(this.inventory, function(index, value){
             if (value.type === 'bow'){
-                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
+                let opn = "<option value='"+value.name+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Cena: "+value.itemValue+"</option>";
                 $(id).append(opn);  
             }
             
         });
     }
     vypsatLektvary(id){
+        $(id).empty();
         $.each(this.inventory, function(index, value){
-            if (value.type === 'mpotion' || 'hpotion'){
-                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.effect+")"+" Cena: "+value.itemValue+"</option>";
+            if (value.type === 'potion'){
+                let opn = "<option value='"+value.name+"'>"+value.name+" ("+value.effect+")"+" Cena: "+value.itemValue+"</option>";
                 $(id).append(opn);  
             }
             
         });
     }
     vypsatKouzla(id){
+        $(id).empty();
         $.each(this.inventory, function(index, value){
-            if (value.type === 'fspell' || 'wspell'){
-                let opn = "<option value='"+index+value.type+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Potřebná mana: "+value.manaCost+" Cena: "+value.itemValue+"</option>";
+            if (value.type === 'fspell'){
+                let opn = "<option value='"+value.name+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Potřebná mana: "+value.manaCost+" Cena: "+value.itemValue+"</option>";
+                $(id).append(opn);  
+            }
+            
+        });
+        $.each(this.inventory, function(index, value){
+            if (value.type === 'wspell'){
+                let opn = "<option value='"+value.name+"'>"+value.name+" ("+value.minDam+"-"+value.maxDam+")"+" Potřebná mana: "+value.manaCost+" Cena: "+value.itemValue+"</option>";
                 $(id).append(opn);  
             }
             

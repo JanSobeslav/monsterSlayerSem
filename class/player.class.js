@@ -42,17 +42,29 @@ class Player {
         return Math.floor(Math.random() * (this.maxDam - this.minDam + 1) ) + this.minDam;
     }
     prodat(predmet) {
-        let index = -1;
-        let filteredObj = this.inventory.find(function(item, i){
-            if(item.name === predmet){
-                index = i;
-                return i;
-            }
+        $.each(this.inventory, function(index, value){
+            if (value.name === predmet.name){
+                this.inventory.slice(index, 1);
+            }  
         });
-        this.inventory.slice(index, 1);
-        console.log('Položka '+filteredObj.name+' byla odstraněna!');
     }
     koupit(predmet) {
-        this.inventory.push(predmet);
+        let vysledek = true;
+        $.each(this.inventory, function(index, value){
+            if (value.name === predmet.name){
+                vysledek = false;
+            }  
+        });
+        if(vysledek === true) {
+            this.inventory.push(predmet);
+        }
+        
+    }
+    vypsatInventar(id){
+        $.each(this.inventory, function(index, value){
+            let opn = "<option value='"+value.name+"'>"+value.name+" Cena: "+value.itemValue+"</option>";
+            $(id).append(opn);  
+            
+        });
     }
 }

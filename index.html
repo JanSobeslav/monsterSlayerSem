@@ -60,7 +60,7 @@
                     case 'clovek':
                         zv = 80;
                         mn = 50;
-                        zl = 5;
+                        zl = 10000000;
                         rs = "Člověk";
                         break;
                     case 'trpaslik':
@@ -85,10 +85,9 @@
                 hrac = new Player(jm, rs, zv, mn, 5, 10, zl);
                 prisera = new Monster();
                 obchodnik = new Merchant();
-                obchodnik.vypsatMece();
                 console.log("Nová hra; jméno: " + hrac.name + " Příšera: " + prisera.weak);
                 $("#hra").load("game.html");
-                setTimeout(function () { hra(hrac, prisera, obchodnik); }, 500);
+                setTimeout(function () { hra(hrac, prisera, obchodnik); }, 100);
             } else {
                 $("#jmenoForm").attr('placeholder', 'MUSÍTE VYPLNIT JMÉNO!!!');
             }
@@ -112,7 +111,7 @@
             $("#vyprava").click(function () {
                 $("#hra").load("fight.html");
                 console.log("začíná boj");
-                setTimeout(function () { boj(hrac, prisera); }, 500);
+                setTimeout(function () { boj(hrac, prisera, obchodnik); }, 500);
             });
             //konec
             $("#konec").click(function(){
@@ -122,13 +121,13 @@
             $("#obchodnik").click(function(){
                 $("#hra").load("store.html");
                 console.log("u obchodnika");
-                setTimeout(function () { obchod(hrac, obchodnik); }, 500);
+                setTimeout(function () { obchod(hrac, prisera, obchodnik); }, 500);
             });
         
 
     }
     //BOJ
-    function boj(hrac, prisera) {
+    function boj(hrac, prisera, obchodnik) {
         obnovitStatus(hrac, prisera);
         //ÚTOK
         $("#utokBtn").click(function () {
@@ -148,7 +147,7 @@
                         hrac.maxHealth = hrac.maxHealth*((prisera.level+1)/2); 
                         hrac.upravitZivoty(hrac.maxHealth, true);
                         hrac.upravitZlato((prisera.level * 5), true);
-                        hra(hrac, prisera);
+                        hra(hrac, prisera, obchodnik);
                     }, 100);
                 }, 5000); 
             }
@@ -182,8 +181,52 @@
         $("#poskozeniM").text(prisera.minDam + "-" + prisera.maxDam);
     }
     //OBCHODNIK
-    function obchod(hrac, obchodnik) {
-
+    function obchod(hrac, prisera, obchodnik) {
+        $("#zlato").text(hrac.gold);
+        $("#predmetVybrat").empty();
+        hrac.vypsatInventar("#predmetVybrat");
+        $("#potvrdit").click(function(){
+            let nazevPredmetu = $("#typVybrat").val();
+            switch (nazevPredmetu) {
+                case 'sword':
+                    obchodnik.vypsatMece("#predmet1Vybrat");
+                    break;
+                case 'axe':
+                    obchodnik.vypsatSekery("#predmet1Vybrat");
+                    break;
+                case 'flail':
+                    obchodnik.vypsatKyje("#predmet1Vybrat");
+                    break;
+                case 'bow':
+                    obchodnik.vypsatLuky("#predmet1Vybrat");
+                    break;
+                case 'potion':
+                    obchodnik.vypsatLektvary("#predmet1Vybrat");
+                    break;
+                case 'spell':
+                    obchodnik.vypsatKouzla("#predmet1Vybrat");
+                    break;
+                default:
+                    $("#predmet1Vybrat").empty();
+                    $("#predmet1Vybrat").append("<option>Vyberte typ předmětu!</option>");
+                    break;
+            }
+        });
+        $("#koupitPredmet").click(function(){
+            let nazevPredmetu = $("#predmet1Vybrat").val();
+            let predmet = obchodnik.najitPredmet(nazevPredmetu);
+            if(hrac.gold >= predmet.itemValue) {
+                hrac.upravitZlato(predmet.itemValue, false);
+                hrac.koupit(predmet);
+                obchod(hrac, prisera, obchodnik);
+            }
+        });
+        $("#odejitBtn").click(function(){
+            $("#hra").load("game.html");
+            setTimeout(function(){
+                hra(hrac, prisera, obchodnik);
+            }, 100);
+        });
     }
 </script>
 <script src="class/player.class.js"></script>
