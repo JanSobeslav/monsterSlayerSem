@@ -111,7 +111,7 @@
             $("#vyprava").click(function () {
                 $("#hra").load("fight.html");
                 console.log("začíná boj");
-                setTimeout(function () { boj(hrac, prisera, obchodnik); }, 500);
+                setTimeout(function () { boj(hrac, prisera, obchodnik); }, 100);
             });
             //konec
             $("#konec").click(function(){
@@ -121,7 +121,13 @@
             $("#obchodnik").click(function(){
                 $("#hra").load("store.html");
                 console.log("u obchodnika");
-                setTimeout(function () { obchod(hrac, prisera, obchodnik); }, 500);
+                setTimeout(function () { obchod(hrac, prisera, obchodnik); }, 100);
+            });
+            //inventář
+            $("#inventar").click(function(){
+                $("#hra").load("inventory.html");
+                console.log("inventář");
+                setTimeout(function () { inventar(hrac, prisera, obchodnik); }, 100);
             });
         
 
@@ -144,7 +150,7 @@
                     $("#hra").load("game.html"); 
                     setTimeout(function(){
                         prisera.obnoveni();
-                        hrac.maxHealth = hrac.maxHealth*((prisera.level+1)/2); 
+                        hrac.maxHealth = hrac.maxHealth+((prisera.level)*10); 
                         hrac.upravitZivoty(hrac.maxHealth, true);
                         hrac.upravitZlato((prisera.level * 5), true);
                         hra(hrac, prisera, obchodnik);
@@ -165,6 +171,10 @@
                 $("#kouzloBtn").prop('disabled', false);
             }, 1500);
         });
+        $("#malyLektvZ").click(function(){
+            $("#malyLektvZ").text("X");
+            obnovitStatus(hrac, prisera);
+        });
 
     }
     function obnovitStatus(hrac, prisera) {
@@ -179,14 +189,34 @@
         $("#urovenM").text(prisera.level);
         $("#zivotM").text(prisera.health);
         $("#poskozeniM").text(prisera.minDam + "-" + prisera.maxDam);
+        //lektvary
+        let predmet = hrac.najitPredmet("Malý lektvar zdraví");
+        $("#malyLektvZ").text((predmet[0] === undefined) ? "X" : "");
+        let predmet1 = hrac.najitPredmet("Střední lektvar zdraví");
+        $("#stredniLektvZ").text((predmet1[0] === undefined) ? "X" : "");
+        let predmet2 = hrac.najitPredmet("Velký lektvar zdraví");
+        $("#velkyLektvZ").text((predmet2[0] === undefined) ? "X" : "");
+        let predmet3 = hrac.najitPredmet("Lektvar života");
+        $("#lektvZ").text((predmet3[0] === undefined) ? "X" : "");
+
+        let predmet4 = hrac.najitPredmet("Malý lektvar many");
+        $("#malyLektvM").text((predmet4[0] === undefined) ? "X" : "");
+        let predmet5 = hrac.najitPredmet("Střední lektvar many");
+        $("#stredniLektvM").text((predmet5[0] === undefined) ? "X" : "");
+        let predmet6 = hrac.najitPredmet("Velký lektvar many");
+        $("#velkyLektvM").text((predmet6[0] === undefined) ? "X" : "");
+        let predmet7 = hrac.najitPredmet("Lektvar magické síly");
+        $("#lektvM").text((predmet7[0] === undefined) ? "X" : "");
     }
     //OBCHODNIK
     function obchod(hrac, prisera, obchodnik) {
         $("#zlato").text(hrac.gold);
         $("#predmetVybrat").empty();
-        hrac.vypsatInventar("#predmetVybrat");
+        //vybrat předmět
+        hrac.vypsatInventar("#predmetVybrat", "select");
         $("#potvrdit").click(function(){
             let nazevPredmetu = $("#typVybrat").val();
+            //option podle předchozí volby
             switch (nazevPredmetu) {
                 case 'sword':
                     obchodnik.vypsatMece("#predmet1Vybrat");
@@ -215,11 +245,41 @@
         $("#koupitPredmet").click(function(){
             let nazevPredmetu = $("#predmet1Vybrat").val();
             let predmet = obchodnik.najitPredmet(nazevPredmetu);
-            if(hrac.gold >= predmet.itemValue) {
+            let hracPredmet = hrac.najitPredmet(nazevPredmetu);
+            if(hracPredmet[0] === undefined) {
+                hracPredmet = "0";
+            } else {
+                hracPredmet = hracPredmet[0].name;
+            }
+            if((hrac.gold >= predmet.itemValue) && (nazevPredmetu !== hracPredmet)) {
                 hrac.upravitZlato(predmet.itemValue, false);
                 hrac.koupit(predmet);
-                obchod(hrac, prisera, obchodnik);
+                $("#predmetVybrat").empty();
+                hrac.vypsatInventar("#predmetVybrat", "select");
+                $("#zlato").text(hrac.gold);
+            } else {
+                console.log("Nemáš dostatek zlata nebo je předmět už koupený!");
             }
+        });
+        $("#odejitBtn").click(function(){
+            $("#hra").load("game.html");
+            setTimeout(function(){
+                hra(hrac, prisera, obchodnik);
+            }, 100);
+        });
+    }
+    //INVENTÁŘ
+    function inventar(hrac, prisera, obchodnik){
+        $(".listWrapper").empty();
+        $("#predmetVybrat").empty();
+        hrac.vypsatInventar(".listWrapper", "list");
+        hrac.vypsatInventar("#predmetVybrat", "select");
+        $("#vybavit").click(function(){
+            let nazevPredmetu = $("#predmetVybrat").val();
+            let predmet = obchodnik.najitPredmet(nazevPredmetu);
+            hrac.equippedItem = predmet.name;
+            hrac.upravitPoskozeni(predmet.minDam, predmet.maxDam);
+            //zjistit proč po vybavení předmětem hrac dává poškození 2x až 4x..? UPDATE: nesmí se volat při koupi předmětu hra()
         });
         $("#odejitBtn").click(function(){
             $("#hra").load("game.html");

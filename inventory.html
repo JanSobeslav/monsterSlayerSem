@@ -12,31 +12,21 @@
         <title>Lovec příšer</title>
     </head>
     <body>
-<div class="boj">
-    <p id="jmeno"></p>
-    <p id="rasa"></p>
-    <p id="zivot"></p>
-    <p id="mana"></p>
-    <p id="poskozeni"></p>
+<div class="inventar">
+
     <p id="zlato"></p>
-    <button id="utokBtn">Útok!</button>
-    <button id="kouzloBtn">Kouzlo</button>
-
-    <p id="urovenM"></p>
-    <p id="zivotM"></p>
-    <p id="poskozeniM"></p>
-    <p id="statusBoje"></p>
-    <div id="lektvary">
-        <p id="malyLektvZ"></p>
-        <p id="stredniLektvZ"></p>
-        <p id="velkyLektvZ"></p>
-        <p id="lektvZ"></p>
-
-        <p id="malyLektvM"></p>
-        <p id="stredniLektvM"></p>
-        <p id="velkyLektvM"></p>
-        <p id="lektvM"></p>
+    
+        <ul id="seznamPredmetu">
+            <div class="listWrapper">
+            </div>
+        </ul>
+    <div id="mujInventar">
+        <p>Předměty <button id="vybavit">Vybavit</button></p>
+        <select name="predmetVybrat" id="predmetVybrat">   
+            <option>--Vybrat--</option>   
+        </select>    
     </div>
+    <button id="odejitBtn">Zavřít inventář</button>
     
 </div></body>
 </html>

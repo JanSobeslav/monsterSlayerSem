@@ -9,6 +9,7 @@ class Player {
         this.maxDam = maxDam;
         this.gold = gold;
         this.inventory = [];
+        this.equippedItem;
     }
     upravitZivoty(hodnota, akce) {
         if (akce == true) {
@@ -39,6 +40,7 @@ class Player {
         this.maxDam = max;
     }
     utok() {
+        console.log(Math.floor(Math.random() * (this.maxDam - this.minDam + 1) ) + this.minDam);
         return Math.floor(Math.random() * (this.maxDam - this.minDam + 1) ) + this.minDam;
     }
     prodat(predmet) {
@@ -60,11 +62,61 @@ class Player {
         }
         
     }
-    vypsatInventar(id){
+    najitPredmet(val) {
+        let predmet = [];
+        let pocet = 0;
         $.each(this.inventory, function(index, value){
-            let opn = "<option value='"+value.name+"'>"+value.name+" Cena: "+value.itemValue+"</option>";
-            $(id).append(opn);  
+            if (value.name === val){
+                console.log("předmět nalezen!");
+                pocet++;
+                predmet = [value, pocet];
+            }
             
         });
+        if (predmet[0] === undefined) {
+            return false;
+        } else {
+            console.log("počet predmetu: "+predmet[1]);
+            return predmet;  
+        } 
+        
+    }
+    vypsatInventar(id, typ){
+        let opn;
+        if (typ === "select"){
+            $.each(this.inventory, function(index, value){
+                opn = "<option value='"+value.name+"'>"+value.name+" Cena: "+value.itemValue+"</option>";
+                $(id).append(opn);  
+                
+            });
+        }
+        if (typ === "list") {
+            $.each(this.inventory, function(index, value){
+                switch (value.type) {
+                    case 'potion':
+                        opn = "<li>"+value.name+" Efekt: "+value.effect+" Cena: "+value.itemValue+"</li>";
+                        $(id).append(opn); 
+                        break;
+
+                    case 'fspell':
+                        opn = "<li>"+value.name+" Poškození: "+value.minDam+"-"+value.maxDam+" Cena many: "+value.manaCost+" Cena: "+value.itemValue+"</li>";
+                        $(id).append(opn); 
+                        break;
+                    
+                    case 'wspell':
+                        opn = "<li>"+value.name+" Poškození: "+value.minDam+"-"+value.maxDam+" Cena many: "+value.manaCost+" Cena: "+value.itemValue+"</li>";
+                        $(id).append(opn); 
+                        break;
+
+                    default:
+                        opn = "<li>"+value.name+" Poškození: "+value.minDam+"-"+value.maxDam+" Cena: "+value.itemValue+"</li>";
+                        $(id).append(opn); 
+                        break;
+                }
+                 
+                
+            });
+        } 
+        
     }
 }

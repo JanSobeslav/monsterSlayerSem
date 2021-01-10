@@ -240,6 +240,46 @@ h1 {
     color: firebrick;
     text-shadow: 0px 0px 8px black;
 }
+#lektvary p {
+    position: absolute;
+    margin-left: 18pt;
+    font-size: 1.3em;
+    font-weight: 700;
+    color: red;
+    cursor:pointer;
+}
+#malyLektvZ {
+    left: 184pt; 
+    top: 35pt;
+}
+#stredniLektvZ {
+    left: 205pt; 
+    top: 35pt;
+}
+#velkyLektvZ {
+    left: 229pt; 
+    top: 35pt;
+}
+#lektvZ {
+    left: 256pt; 
+    top: 35pt;
+}
+#malyLektvM {
+    left: 287pt; 
+    top: 35pt;
+}
+#stredniLektvM {
+    left: 306pt; 
+    top: 35pt;
+}
+#velkyLektvM {
+    left: 330pt; 
+    top: 35pt;
+}
+#lektvM {
+    left: 358pt; 
+    top: 35pt;
+}
 /* ------- BOJ -------*/
 /* ------- OBCHOD -------*/
 .obchod {
@@ -287,3 +327,41 @@ h1 {
     background-color: rgb(117, 89, 51);
 }
 /* ------- OBCHOD -------*/
+/* ------- INVENTÁŘ -------*/
+.inventar {
+    height: 800px; 
+    background-image: url('../assets/hraInventar.png');
+    background-repeat: no-repeat; 
+    background-position: left top;
+    background-attachment: scroll;
+}
+#seznamPredmetu {
+    position: absolute;
+    top: 50pt;
+    left: 170pt;
+    list-style:none;
+}
+.listWrapper {
+    max-height:250pt;
+    overflow-y:auto;
+}
+.inventar li {
+    margin-right: 20pt;
+}
+.inventar #odejitBtn {
+    position: absolute;
+    top: 335pt;
+    left: 450pt;
+}
+#vybavit {
+    font-weight: 700;
+    color: rgb(51, 54, 54);
+    background-color: rgb(190, 141, 76);
+    cursor: pointer;
+}
+#vybavit:hover {
+    font-weight: 700;
+    color: rgb(151, 151, 151);
+    background-color: rgb(117, 89, 51);
+}
+/* ------- INVENTÁŘ -------*/

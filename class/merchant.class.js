@@ -685,12 +685,6 @@ class Merchant {
         
     }
     najitPredmet(val) {
-        // let filteredObj = this.inventory.find(function(item, i){
-        //     if(item.name === val){
-        //         return i;
-        //     }
-        // });
-        // return filteredObj;
         let predmet;
         $.each(this.inventory, function(index, value){
             if (value.name === val){
