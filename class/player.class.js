@@ -9,7 +9,7 @@ class Player {
         this.maxDam = maxDam;
         this.gold = gold;
         this.inventory = [];
-        this.equippedItem;
+        this.equippedItem = null;
     }
     upravitZivoty(hodnota, akce) {
         if (akce == true) {
@@ -38,6 +38,8 @@ class Player {
     upravitPoskozeni(min, max) {
         this.minDam = min;
         this.maxDam = max;
+        this.minDam.toFixed(0);
+        this.maxDam.toFixed(0);
     }
     utok() {
         return Math.floor(Math.random() * (this.maxDam - this.minDam + 1)) + this.minDam;

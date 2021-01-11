@@ -141,9 +141,17 @@
     }
     //BOJ
     function boj(hrac, prisera, obchodnik, vestec) {
+        if (hrac.equippedItem !== null){
+            if (hrac.equippedItem.type === prisera.weak) {
+                hrac.upravitPoskozeni(hrac.equippedItem.minDam, hrac.equippedItem.maxDam); 
+                hrac.minDam += hrac.minDam*0.15;
+                hrac.maxDam += hrac.maxDam*0.15;   
+            } else {
+                hrac.upravitPoskozeni(hrac.equippedItem.minDam, hrac.equippedItem.maxDam); 
+            }
+        }
+        console.log(prisera.weak);
         obnovitStatus(hrac, prisera);
-        $("#utokBtn").prop('disabled', false);
-        $("#kouzloBtn").prop('disabled', false);
         //ÚTOK
         $("#utokBtn").click(function () {
             $("#utokBtn").prop('disabled', true);
@@ -157,13 +165,15 @@
                 $("#statusBoje").html("Zabil jsi příšeru!<br> Získáváš " + (prisera.level * 5) + " zlata.");
                 $("#utokBtn").prop('disabled', true);
                 $("#kouzloBtn").prop('disabled', true);
-                setTimeout(function () { 
+                setTimeout(function () {
+                    $("#utokBtn").prop('disabled', false);
+                    $("#kouzloBtn").prop('disabled', false);
                     $("#hra").load("game.html"); 
                     setTimeout(function(){
                         prisera.obnoveni();
                         hrac.maxHealth = hrac.maxHealth+((prisera.level)*10); 
                         hrac.upravitZivoty(hrac.maxHealth, true);
-                        hrac.upravitZlato((prisera.level * 5), true);
+                        hrac.upravitZlato((prisera.level * 5), true);                        
                         hra(hrac, prisera, obchodnik, vestec);
                     }, 100);
                 }, 5000); 
@@ -383,7 +393,7 @@
         $("#vybavit").click(function(){
             let nazevPredmetu = $("#predmetVybrat").val();
             let predmet = obchodnik.najitPredmet(nazevPredmetu);
-            hrac.equippedItem = predmet.name;
+            hrac.equippedItem = predmet;
             hrac.upravitPoskozeni(predmet.minDam, predmet.maxDam);
         });
         $("#odejitBtn").click(function(){

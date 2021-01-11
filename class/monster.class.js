@@ -11,6 +11,7 @@ class Monster {
             this.health += hodnota;
         } else {
             this.health -= hodnota;
+            this.health.toFixed(0);
         }
     }
     utok() {
