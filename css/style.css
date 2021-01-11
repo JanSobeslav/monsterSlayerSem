@@ -247,6 +247,8 @@ h1 {
     font-weight: 700;
     color: red;
     cursor:pointer;
+    height: 17pt;
+    width: 9pt;
 }
 #malyLektvZ {
     left: 184pt; 
