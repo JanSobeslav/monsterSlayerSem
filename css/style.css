@@ -367,3 +367,42 @@ h1 {
     background-color: rgb(117, 89, 51);
 }
 /* ------- INVENTÁŘ -------*/
+/* ------- VĚŠTEC -------*/
+.vestec {
+    height: 800px; 
+    background-image: url('../assets/hraVestec.png');
+    background-repeat: no-repeat; 
+    background-position: left top;
+    background-attachment: scroll;
+}
+.vestec #odejitBtn {
+    position: absolute;
+    top: 350pt;
+    left: 530pt;
+}
+#vypisVyhody {
+    position: absolute;
+    top: 20pt;
+    left: 35pt;
+    color: firebrick;
+    font-size: 1.5em;
+    font-weight: 600;
+}
+#vyhodaBtn {
+    position: absolute;
+    top: 180pt;
+    left: 60pt;
+    height: 60pt;
+    width: 60pt;
+    border: 3px solid indigo;
+    background-color: fuchsia;
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+}
+#vyhodaBtn:hover {
+    background-color: indigo;
+    color: white;
+    text-shadow: 0px 0px 7px rgba(255, 0, 255, 1);
+}
+/* ------- VĚŠTEC -------*/
