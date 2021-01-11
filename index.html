@@ -396,8 +396,20 @@
     //VĚŠTEC
     function vestecDum(hrac, prisera, obchodnik, vestec) {
         $("#zlato").text(hrac.gold);
+        $("#vyhodaBtn").text("Zjistit výhodu");
+        let prvniPokus = false;
         $("#vyhodaBtn").click(function (){
-            $("#vypisVyhody").text(vestec.vypsatVyhodu(prisera.weak));
+            if (prvniPokus === false) {
+                $("#vypisVyhody").text(vestec.vypsatVyhodu(prisera.weak));
+                $("#vyhodaBtn").text("Zjistit výhodu (50 zl)");
+                prvniPokus = true;
+            } else {
+                hrac.upravitZlato(50, false);
+                $("#vypisVyhody").text(vestec.vypsatVyhodu(prisera.weak));
+                $("#vyhodaBtn").text("Zjistit výhodu (50 zl)");
+                $("#zlato").text(hrac.gold);
+            }
+            
         });
         $("#odejitBtn").click(function(){
             $("#hra").load("game.html");
