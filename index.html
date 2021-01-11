@@ -61,7 +61,7 @@
                     case 'clovek':
                         zv = 80;
                         mn = 50;
-                        zl = 10000000;
+                        zl = 5;
                         rs = "Člověk";
                         break;
                     case 'trpaslik':
@@ -97,12 +97,14 @@
         $("#nacist").click(function () {
             $("#nacistHruForm").css("display", "grid");
             $("#novaHraForm").css("display", "none");
-            $("#nacistHruForm").text(ls.info);
+            $("#ulozText").text(ls.info);
         });
         $("#nacistHruForm").click(function(){
-            hrac = JSON.parse(ls.hrac);
+            hrac1 = JSON.parse(ls.hrac);
             prisera1 = JSON.parse(ls.prisera);
-            hrac = new Player(hrac.name, hrac.race, hrac.health, hrac.mana, hrac.minDam, hrac.maxDam, hrac.gold);
+            hrac = new Player(hrac1.name, hrac1.race, hrac1.health, hrac1.mana, hrac1.minDam, hrac1.maxDam, hrac1.gold);
+            hrac.inventory = hrac1.inventory;
+            hrac.equippedItem = hrac1.equippedItem;
             prisera = new Monster();
             prisera.health = prisera1.health;
             prisera.minDam = prisera1.minDam;
@@ -133,8 +135,11 @@
             });
             //uložit
             $("#ulozit").click(function(){
+                let d = new Date();
                 ls.hrac = hrac;
                 ls.prisera = prisera;
+                ls.inventar = hrac.inventory;
+                ls.info = hrac.name+" - "+d.getFullYear()+"/"+d.getMonth()+"/"+d.getDate()+" - "+d.getHours()+":"+d.getMinutes();
             });
             //konec
             $("#konec").click(function(){
