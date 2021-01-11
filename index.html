@@ -102,7 +102,7 @@
         $("#nacistHruForm").click(function(){
             hrac1 = JSON.parse(ls.hrac);
             prisera1 = JSON.parse(ls.prisera);
-            hrac = new Player(hrac1.name, hrac1.race, hrac1.health, hrac1.mana, hrac1.minDam, hrac1.maxDam, hrac1.gold);
+            hrac = new Player(hrac1.name, hrac1.race, hrac1.health, hrac1.mana, hrac1.minDam, hrac1.maxDam, parseInt(hrac1.gold));
             hrac.inventory = hrac1.inventory;
             hrac.equippedItem = hrac1.equippedItem;
             prisera = new Monster();
@@ -205,7 +205,9 @@
                         prisera.obnoveni();
                         hrac.maxHealth = hrac.maxHealth+((prisera.level)*10); 
                         hrac.upravitZivoty(hrac.maxHealth, true);
-                        hrac.upravitZlato((prisera.level * 5), true);                        
+                        hrac.upravitZlato((prisera.level * 5), true); 
+                        $("#zlato").text(hrac.gold); 
+                        $("#zlato").empty();                     
                         hra(hrac, prisera, obchodnik, vestec, ls);
                     }, 100);
                 }, 5000); 
@@ -401,6 +403,7 @@
             }
             if((hrac.gold >= predmet.itemValue) && (nazevPredmetu !== hracPredmet)) {
                 hrac.upravitZlato(predmet.itemValue, false);
+                console.log("ZLATO: "+hrac.gold);
                 hrac.koupit(predmet);
                 $("#predmetVybrat").empty();
                 hrac.vypsatInventar("#predmetVybrat", "select");
@@ -408,6 +411,21 @@
             } else {
                 console.log("Nemáš dostatek zlata nebo je předmět už koupený!");
             }
+        });
+        $("#prodatPredmet").click(function(){
+            if (hrac.inventory.length !== 0){
+                let nazevPredmetu = $("#predmetVybrat").val();
+                let predmet = obchodnik.najitPredmet(nazevPredmetu);
+                let cenaPredmet = predmet.itemValue*0.75;
+                hrac.upravitZlato(cenaPredmet , true);
+                predmet = hrac.odstranitPredmet(nazevPredmetu);
+                hrac.inventory = predmet;
+                $("#zlato").empty();
+                $("#zlato").text(hrac.gold);
+                $("#predmetVybrat").empty();
+                hrac.vypsatInventar("#predmetVybrat", "select");
+            }
+            
         });
         $("#odejitBtn").click(function(){
             $("#hra").load("game.html");

@@ -18,7 +18,7 @@ class Player {
                 this.health = this.maxHealth;
             }
         } else {
-            hodnota.toFixed(0);
+            hodnota = Number(hodnota).toFixed(0);
             this.health -= hodnota;
         }
     }
@@ -31,8 +31,13 @@ class Player {
     }
     upravitZlato(hodnota, akce) {
         if (akce == true) {
-            this.gold += hodnota;
+            console.log("typ this.gold: "+typeof this.gold+"; typ hodnota: "+typeof hodnota);
+            hodnota = Number(hodnota).toFixed(0);
+            console.log("class zlato upravene: "+hodnota);
+            this.gold = Number(this.gold) + Number(hodnota);  
+            console.log("zlato celkem: "+typeof this.gold);
         } else {
+            hodnota = Number(hodnota).toFixed(0);
             this.gold -= hodnota;
         }
     }
@@ -49,13 +54,6 @@ class Player {
         let gPoskozeni = Math.floor(Math.random() * (max - min + 1) + min);
         console.log("g dmg: "+gPoskozeni);
         return gPoskozeni;
-    }
-    prodat(predmet) {
-        $.each(this.inventory, function (index, value) {
-            if (value.name === predmet.name) {
-                this.inventory.slice(index, 1);
-            }
-        });
     }
     odstranitPredmet(nazev) {
         return this.inventory.filter(function (emp) {
