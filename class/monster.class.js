@@ -10,8 +10,9 @@ class Monster {
         if (akce == true) {
             this.health += hodnota;
         } else {
+            hodnota = Number(hodnota).toFixed(0);
+            console.log("ubrat životy příšeře: "+hodnota);
             this.health -= hodnota;
-            this.health.toFixed(0);
         }
     }
     utok() {
@@ -40,12 +41,14 @@ class Monster {
                 break;
             }
         this.level++;
-        this.health = 50*((this.level+1)/2);
-        this.minDam += 2*this.level;
-        this.maxDam += 2.5*this.level;
-        this.health.toFixed(0);
-        this.minDam.toFixed(0);
-        this.maxDam.toFixed(0);
-
+        let h = 50*((this.level+1)/2);
+        Number(h).toFixed(0);
+        let minD = 2*this.level;
+        Number(minD).toFixed(0);
+        let maxD = 2.5*this.level;
+        Number(maxD).toFixed(0);
+        this.health = h;
+        this.minDam += minD;
+        this.maxDam += maxD;
     }
 }

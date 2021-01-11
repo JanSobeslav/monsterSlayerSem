@@ -18,6 +18,7 @@ class Player {
                 this.health = this.maxHealth;
             }
         } else {
+            hodnota.toFixed(0);
             this.health -= hodnota;
         }
     }
@@ -36,13 +37,18 @@ class Player {
         }
     }
     upravitPoskozeni(min, max) {
+        min = Number(min).toFixed(0);
+        max = Number(max).toFixed(0);
         this.minDam = min;
         this.maxDam = max;
-        this.minDam.toFixed(0);
-        this.maxDam.toFixed(0);
     }
     utok() {
-        return Math.floor(Math.random() * (this.maxDam - this.minDam + 1)) + this.minDam;
+        console.log("---- min/max "+this.minDam+"-"+this.maxDam);
+        let min = Number(this.minDam);
+        let max = Number(this.maxDam);
+        let gPoskozeni = Math.floor(Math.random() * (max - min + 1) + min);
+        console.log("g dmg: "+gPoskozeni);
+        return gPoskozeni;
     }
     prodat(predmet) {
         $.each(this.inventory, function (index, value) {

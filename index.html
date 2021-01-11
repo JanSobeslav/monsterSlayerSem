@@ -46,6 +46,7 @@
     $(document).ready(function () {
         let hrac;
         let prisera;
+        const ls = new LocalStorage();
         //NOVA HRA
         $("#nova").click(function () {
             $("#novaHraForm").css("display", "grid");
@@ -86,9 +87,8 @@
                 prisera = new Monster();
                 obchodnik = new Merchant();
                 vestec = new Oracle();
-                console.log(hrac.inventory);
                 $("#hra").load("game.html");
-                setTimeout(function () { hra(hrac, prisera, obchodnik, vestec); }, 100);
+                setTimeout(function () { hra(hrac, prisera, obchodnik, vestec, ls); }, 100);
             } else {
                 $("#jmenoForm").attr('placeholder', 'MUSÍTE VYPLNIT JMÉNO!!!');
             }
@@ -97,11 +97,28 @@
         $("#nacist").click(function () {
             $("#nacistHruForm").css("display", "grid");
             $("#novaHraForm").css("display", "none");
+            $("#nacistHruForm").text(ls.info);
+        });
+        $("#nacistHruForm").click(function(){
+            hrac = JSON.parse(ls.hrac);
+            prisera1 = JSON.parse(ls.prisera);
+            hrac = new Player(hrac.name, hrac.race, hrac.health, hrac.mana, hrac.minDam, hrac.maxDam, hrac.gold);
+            prisera = new Monster();
+            prisera.health = prisera1.health;
+            prisera.minDam = prisera1.minDam;
+            prisera.maxDam = prisera1.maxDam;
+            prisera.weak = prisera1.weak;
+            prisera.level = prisera1.level;
+            obchodnik = new Merchant();
+            vestec = new Oracle();
+            console.log(hrac.name+" - "+hrac.race+" - "+hrac.gold);
+            $("#hra").load("game.html");
+            setTimeout(function () { hra(hrac, prisera, obchodnik, vestec, ls); }, 100);
         });
 
     });
     //HRA
-    function hra(hrac, prisera, obchodnik, vestec) {
+    function hra(hrac, prisera, obchodnik, vestec, ls) {
             $("#jmeno").text(hrac.name);
             $("#rasa").text(hrac.race);
             $("#zivot").text(hrac.health);
@@ -112,7 +129,12 @@
             $("#vyprava").click(function () {
                 $("#hra").load("fight.html");
                 console.log("začíná boj");
-                setTimeout(function () { boj(hrac, prisera, obchodnik, vestec); }, 100);
+                setTimeout(function () { boj(hrac, prisera, obchodnik, vestec, ls); }, 100);
+            });
+            //uložit
+            $("#ulozit").click(function(){
+                ls.hrac = hrac;
+                ls.prisera = prisera;
             });
             //konec
             $("#konec").click(function(){
@@ -122,30 +144,34 @@
             $("#obchodnik").click(function(){
                 $("#hra").load("store.html");
                 console.log("u obchodnika");
-                setTimeout(function () { obchod(hrac, prisera, obchodnik, vestec); }, 100);
+                setTimeout(function () { obchod(hrac, prisera, obchodnik, vestec, ls); }, 100);
             });
             //inventář
             $("#inventar").click(function(){
                 $("#hra").load("inventory.html");
                 console.log("inventář");
-                setTimeout(function () { inventar(hrac, prisera, obchodnik, vestec); }, 100);
+                setTimeout(function () { inventar(hrac, prisera, obchodnik, vestec, ls); }, 100);
             });
             //věštec
             $("#vestec").click(function(){
                 $("#hra").load("oracle.html");
                 console.log("věštec");
-                setTimeout(function () { vestecDum(hrac, prisera, obchodnik, vestec); }, 100);
+                setTimeout(function () { vestecDum(hrac, prisera, obchodnik, vestec, ls); }, 100);
             });
         
 
     }
     //BOJ
-    function boj(hrac, prisera, obchodnik, vestec) {
+    function boj(hrac, prisera, obchodnik, vestec, ls) {
         if (hrac.equippedItem !== null){
             if (hrac.equippedItem.type === prisera.weak) {
-                hrac.upravitPoskozeni(hrac.equippedItem.minDam, hrac.equippedItem.maxDam); 
-                hrac.minDam += hrac.minDam*0.15;
-                hrac.maxDam += hrac.maxDam*0.15;   
+                let min = hrac.equippedItem.minDam;
+                let max = hrac.equippedItem.maxDam;
+                min += min*0.15;
+                max += max*0.15; 
+                console.log("dmg: "+min+"-"+max); 
+                hrac.upravitPoskozeni(Number(min).toFixed(0), Number(max).toFixed(0));
+                console.log(hrac.minDam+"-"+hrac.maxDam);
             } else {
                 hrac.upravitPoskozeni(hrac.equippedItem.minDam, hrac.equippedItem.maxDam); 
             }
@@ -157,6 +183,7 @@
             $("#utokBtn").prop('disabled', true);
             $("#kouzloBtn").prop('disabled', true);
             let poskozeniHrac = hrac.utok();
+            console.log("boj() - poskozeniHrac = "+poskozeniHrac);
             let poskozeniPrisera = prisera.utok();
             $("#statusBoje").html(hrac.name + " zraňuje příšeru<br> poškozením " + poskozeniHrac);
             prisera.upravitZivoty(poskozeniHrac, false);
@@ -174,7 +201,7 @@
                         hrac.maxHealth = hrac.maxHealth+((prisera.level)*10); 
                         hrac.upravitZivoty(hrac.maxHealth, true);
                         hrac.upravitZlato((prisera.level * 5), true);                        
-                        hra(hrac, prisera, obchodnik, vestec);
+                        hra(hrac, prisera, obchodnik, vestec, ls);
                     }, 100);
                 }, 5000); 
             }
@@ -325,7 +352,7 @@
         
     }
     //OBCHODNIK
-    function obchod(hrac, prisera, obchodnik, vestec) {
+    function obchod(hrac, prisera, obchodnik, vestec, ls) {
         $("#zlato").text(hrac.gold);
         $("#predmetVybrat").empty();
         //vybrat předmět
@@ -380,14 +407,15 @@
         $("#odejitBtn").click(function(){
             $("#hra").load("game.html");
             setTimeout(function(){
-                hra(hrac, prisera, obchodnik, vestec);
+                hra(hrac, prisera, obchodnik, vestec, ls);
             }, 100);
         });
     }
     //INVENTÁŘ
-    function inventar(hrac, prisera, obchodnik, vestec){
+    function inventar(hrac, prisera, obchodnik, vestec, ls){
         $(".listWrapper").empty();
         $("#predmetVybrat").empty();
+        $("#zlato").text(hrac.gold);
         hrac.vypsatInventar(".listWrapper", "list");
         hrac.vypsatInventar("#predmetVybrat", "selectVybavit");
         $("#vybavit").click(function(){
@@ -399,12 +427,12 @@
         $("#odejitBtn").click(function(){
             $("#hra").load("game.html");
             setTimeout(function(){
-                hra(hrac, prisera, obchodnik, vestec);
+                hra(hrac, prisera, obchodnik, vestec, ls);
             }, 100);
         });
     }
     //VĚŠTEC
-    function vestecDum(hrac, prisera, obchodnik, vestec) {
+    function vestecDum(hrac, prisera, obchodnik, vestec, ls) {
         $("#zlato").text(hrac.gold);
         $("#vyhodaBtn").text("Zjistit výhodu");
         let prvniPokus = false;
@@ -424,7 +452,7 @@
         $("#odejitBtn").click(function(){
             $("#hra").load("game.html");
             setTimeout(function(){
-                hra(hrac, prisera, obchodnik, vestec);
+                hra(hrac, prisera, obchodnik, vestec, ls);
             }, 100);
         });
     }
@@ -433,3 +461,4 @@
 <script src="class/monster.class.js"></script>
 <script src="class/merchant.class.js"></script>
 <script src="class/oracle.class.js"></script>
+<script src="class/localStorage.class.js"></script>
