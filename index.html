@@ -107,6 +107,7 @@
             hrac.equippedItem = hrac1.equippedItem;
             prisera = new Monster();
             prisera.health = prisera1.health;
+            prisera.maxHealth = prisera1.maxHealth;
             prisera.minDam = prisera1.minDam;
             prisera.maxDam = prisera1.maxDam;
             prisera.weak = prisera1.weak;
@@ -181,7 +182,6 @@
                 hrac.upravitPoskozeni(hrac.equippedItem.minDam, hrac.equippedItem.maxDam); 
             }
         }
-        console.log(prisera.weak);
         obnovitStatus(hrac, prisera);
         //ÚTOK
         $("#utokBtn").click(function () {
@@ -198,12 +198,12 @@
                 $("#utokBtn").prop('disabled', true);
                 $("#kouzloBtn").prop('disabled', true);
                 setTimeout(function () {
-                    $("#utokBtn").prop('disabled', false);
-                    $("#kouzloBtn").prop('disabled', false);
                     $("#hra").load("game.html"); 
                     setTimeout(function(){
+                        $("#utokBtn").prop('disabled', false);
+                        $("#kouzloBtn").prop('disabled', false);
                         prisera.obnoveni();
-                        hrac.maxHealth = hrac.maxHealth+((prisera.level)*10); 
+                        hrac.maxHealth = hrac.maxHealth+((prisera.level)*10);
                         hrac.upravitZivoty(hrac.maxHealth, true);
                         hrac.upravitZlato((prisera.level * 5), true); 
                         $("#zlato").text(hrac.gold); 
@@ -418,6 +418,11 @@
                 let predmet = obchodnik.najitPredmet(nazevPredmetu);
                 let cenaPredmet = predmet.itemValue*0.75;
                 hrac.upravitZlato(cenaPredmet , true);
+                console.log("eq object name: "+hrac.equippedItem.name+" nazev pr: "+nazevPredmetu);
+                if (hrac.equippedItem.name === nazevPredmetu) {
+                    hrac.equippedItem = null;
+                    hrac.upravitPoskozeni(5, 10);
+                }
                 predmet = hrac.odstranitPredmet(nazevPredmetu);
                 hrac.inventory = predmet;
                 $("#zlato").empty();

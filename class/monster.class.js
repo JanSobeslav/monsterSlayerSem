@@ -1,17 +1,17 @@
 class Monster {
     constructor() {
-        this.health = 50;
+        this.health = 60;
         this.minDam = 8;
         this.maxDam = 13;
         this.weak = 'sword';
         this.level = 1;
+        this.maxHealth = this.health;
     }
     upravitZivoty(hodnota, akce) {
         if (akce == true) {
             this.health += hodnota;
         } else {
             hodnota = Number(hodnota).toFixed(0);
-            console.log("ubrat životy příšeře: "+hodnota);
             this.health -= hodnota;
         }
     }
@@ -41,13 +41,13 @@ class Monster {
                 break;
             }
         this.level++;
-        let h = 50*((this.level+1)/2);
-        Number(h).toFixed(0);
+        this.maxHealth = this.maxHealth+(this.level*8);
+        Number(this.maxHealth).toFixed(0);
         let minD = 2*this.level;
         Number(minD).toFixed(0);
         let maxD = 2.5*this.level;
         Number(maxD).toFixed(0);
-        this.health = h;
+        this.health = this.maxHealth;
         this.minDam += minD;
         this.maxDam += maxD;
     }
