@@ -92,8 +92,8 @@ h1 {
 #zivot {
     position: absolute;
     left: 80pt;
-    top: 130pt;
-    font-size: 2em;
+    top: 130pt; /*142*/
+    font-size: 2em; /*1.5*/
     color: rgb(180, 0, 0);
 }
 #mana {
@@ -106,8 +106,8 @@ h1 {
 #poskozeni {
     position: absolute;
     left: 80pt;
-    top: 210pt;
-    font-size: 2em;
+    top: 210pt; /*222*/
+    font-size: 2em; /*1.5*/
     color: rgb(51, 54, 54);
 }
 #zlato {
@@ -124,6 +124,13 @@ h1 {
     top: 280pt;
     left: 35pt;
     cursor: pointer;
+}
+.hra #inventarLabel {
+    position: absolute;
+    height: 40pt;
+    width: 40pt;
+    top: 280pt;
+    left: 80pt;
 }
 .hra #obchodnik {
     position: absolute;
@@ -203,8 +210,8 @@ h1 {
 #poskozeniM {
     position: absolute;
     left: 426pt;
-    top: 120pt;
-    font-size: 2em;
+    top: 120pt; /*130*/
+    font-size: 2em; /*1.5*/
     color: rgb(51, 54, 54);
 }
 #utokBtn {
@@ -239,6 +246,14 @@ h1 {
     font-weight: 700;
     color: firebrick;
     text-shadow: 0px 0px 8px black;
+}
+#kouzloVybrat {
+    position: absolute;
+    left: 200pt;
+    top: 160pt;
+    max-width: 90pt;
+    font-weight: bold;
+    background-color: lightblue;
 }
 #lektvary p {
     position: absolute;
@@ -291,6 +306,9 @@ h1 {
     background-position: left top;
     background-attachment: scroll;
 }
+.obchod select {
+    max-width: 220pt;
+}
 #predmetySkupina {
     position: absolute;
     left: 340pt;
@@ -327,6 +345,22 @@ h1 {
     font-weight: 700;
     color: rgb(151, 151, 151);
     background-color: rgb(117, 89, 51);
+}
+#status {
+    position: absolute;
+    left: 100pt;
+    top: 230pt;
+    color: firebrick;
+    font-size: 1.5em;
+    font-weight: bolder;
+    background-color: rgb(197, 124, 124);
+    border: 2px solid red;
+    display: none;
+}
+.status {
+    color:forestgreen !important;
+    background-color: rgb(157, 184, 157) !important;
+    border: 2px solid rgb(0, 68, 0) !important;
 }
 /* ------- OBCHOD -------*/
 /* ------- INVENTÁŘ -------*/
@@ -365,6 +399,9 @@ h1 {
     font-weight: 700;
     color: rgb(151, 151, 151);
     background-color: rgb(117, 89, 51);
+}
+.inventar #predmetVybrat {
+    max-width: 120pt;
 }
 /* ------- INVENTÁŘ -------*/
 /* ------- VĚŠTEC -------*/

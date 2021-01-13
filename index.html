@@ -44,8 +44,7 @@
 </html>
 <script>
     $(document).ready(function () {
-        let hrac;
-        let prisera;
+        let hrac, prisera;
         const ls = new LocalStorage();
         //NOVA HRA
         $("#nova").click(function () {
@@ -77,7 +76,7 @@
                         rs = "Elf";
                         break;
                     case 'carodej':
-                        zv = 70;
+                        zv = 80;
                         mn = 100;
                         zl = 5;
                         rs = "Čaroděj";
@@ -99,7 +98,7 @@
             $("#novaHraForm").css("display", "none");
             $("#ulozText").text(ls.info);
         });
-        $("#nacistHruForm").click(function(){
+        $("#nacistHruForm").click(function () {
             hrac1 = JSON.parse(ls.hrac);
             prisera1 = JSON.parse(ls.prisera);
             hrac = new Player(hrac1.name, hrac1.race, hrac1.health, hrac1.mana, hrac1.minDam, hrac1.maxDam, parseInt(hrac1.gold));
@@ -114,107 +113,97 @@
             prisera.level = prisera1.level;
             obchodnik = new Merchant();
             vestec = new Oracle();
-            console.log(hrac.name+" - "+hrac.race+" - "+hrac.gold);
+            console.log(hrac.name + " - " + hrac.race + " - " + hrac.gold);
             $("#hra").load("game.html");
             setTimeout(function () { hra(hrac, prisera, obchodnik, vestec, ls); }, 100);
         });
-
     });
     //HRA
     function hra(hrac, prisera, obchodnik, vestec, ls) {
-            $("#jmeno").text(hrac.name);
-            $("#rasa").text(hrac.race);
-            $("#zivot").text(hrac.health);
-            $("#mana").text(hrac.mana);
-            $("#poskozeni").text(hrac.minDam + "-" + hrac.maxDam);
-            $("#zlato").text(hrac.gold);
-            //boj
-            $("#vyprava").click(function () {
-                $("#hra").load("fight.html");
-                console.log("začíná boj");
-                setTimeout(function () { boj(hrac, prisera, obchodnik, vestec, ls); }, 100);
-            });
-            //uložit
-            $("#ulozit").click(function(){
-                let d = new Date();
-                ls.hrac = hrac;
-                ls.prisera = prisera;
-                ls.inventar = hrac.inventory;
-                ls.info = hrac.name+" - "+d.getFullYear()+"/"+d.getMonth()+"/"+d.getDate()+" - "+d.getHours()+":"+d.getMinutes();
-            });
-            //konec
-            $("#konec").click(function(){
-                location.reload();
-            });
-            //obchodník
-            $("#obchodnik").click(function(){
-                $("#hra").load("store.html");
-                console.log("u obchodnika");
-                setTimeout(function () { obchod(hrac, prisera, obchodnik, vestec, ls); }, 100);
-            });
-            //inventář
-            $("#inventar").click(function(){
-                $("#hra").load("inventory.html");
-                console.log("inventář");
-                setTimeout(function () { inventar(hrac, prisera, obchodnik, vestec, ls); }, 100);
-            });
-            //věštec
-            $("#vestec").click(function(){
-                $("#hra").load("oracle.html");
-                console.log("věštec");
-                setTimeout(function () { vestecDum(hrac, prisera, obchodnik, vestec, ls); }, 100);
-            });
-        
+        $("#jmeno").text(hrac.name);
+        $("#rasa").text(hrac.race);
+        $("#zivot").text(hrac.health);
+        $("#mana").text(hrac.mana);
+        $("#poskozeni").text(hrac.minDam + "-" + hrac.maxDam);
+        $("#zlato").text(hrac.gold);
+        //boj
+        $("#vyprava").click(function () {
+            $("#hra").load("fight.html");
+            setTimeout(function () { boj(hrac, prisera, obchodnik, vestec, ls); }, 100);
+        });
+        //uložit
+        $("#ulozit").click(function () {
+            let d = new Date();
+            ls.hrac = hrac;
+            ls.prisera = prisera;
+            ls.inventar = hrac.inventory;
+            ls.info = hrac.name + " - " + d.getFullYear() + "/" + d.getMonth() + "/" + d.getDate() + " - " + d.getHours() + ":" + d.getMinutes();
+            $("#status").css("display", "initial");
+            $("#status").addClass("status");
+            $("#status").html("Hra byla <b>úspěšně uložena</b>!");
+            setTimeout(function () {
+                $("#status").css("display", "none");
+                $("#status").removeClass("status");
+            }, 3000);
+        });
+        //konec
+        $("#konec").click(function () {
+            location.reload();
+        });
+        //obchodník
+        $("#obchodnik").click(function () {
+            $("#hra").load("store.html");
+            console.log("u obchodnika");
+            setTimeout(function () { obchod(hrac, prisera, obchodnik, vestec, ls); }, 100);
+        });
+        //inventář
+        $("#inventar").click(function () {
+            $("#hra").load("inventory.html");
+            console.log("inventář");
+            setTimeout(function () { inventar(hrac, prisera, obchodnik, vestec, ls); }, 100);
+        });
+        //věštec
+        $("#vestec").click(function () {
+            $("#hra").load("oracle.html");
+            console.log("věštec");
+            setTimeout(function () { vestecDum(hrac, prisera, obchodnik, vestec, ls); }, 100);
+        });
+
 
     }
     //BOJ
     function boj(hrac, prisera, obchodnik, vestec, ls) {
-        if (hrac.equippedItem !== null){
+        let poskozeniHrac;
+        let poskozeniPrisera;
+        let pocetKouzla = 0;
+        if (hrac.equippedItem !== null) {
             if (hrac.equippedItem.type === prisera.weak) {
                 let min = hrac.equippedItem.minDam;
                 let max = hrac.equippedItem.maxDam;
-                min += min*0.15;
-                max += max*0.15; 
-                console.log("dmg: "+min+"-"+max); 
+                min += min * 0.15;
+                max += max * 0.15;
+                console.log("dmg: " + min + "-" + max);
                 hrac.upravitPoskozeni(Number(min).toFixed(0), Number(max).toFixed(0));
-                console.log(hrac.minDam+"-"+hrac.maxDam);
+                console.log(hrac.minDam + "-" + hrac.maxDam);
             } else {
-                hrac.upravitPoskozeni(hrac.equippedItem.minDam, hrac.equippedItem.maxDam); 
+                hrac.upravitPoskozeni(hrac.equippedItem.minDam, hrac.equippedItem.maxDam);
             }
         }
         obnovitStatus(hrac, prisera);
+        hrac.vypsatInventar("#kouzloVybrat", "selectKouzla");
         //ÚTOK
         $("#utokBtn").click(function () {
             $("#utokBtn").prop('disabled', true);
             $("#kouzloBtn").prop('disabled', true);
-            let poskozeniHrac = hrac.utok();
-            console.log("boj() - poskozeniHrac = "+poskozeniHrac);
-            let poskozeniPrisera = prisera.utok();
-            $("#statusBoje").html(hrac.name + " zraňuje příšeru<br> poškozením " + poskozeniHrac);
+            poskozeniHrac = hrac.utok();
+            poskozeniPrisera = prisera.utok();
+            $("#statusBoje").html("<b>" + hrac.name + "</b> zraňuje příšeru<br> poškozením " + poskozeniHrac);
             prisera.upravitZivoty(poskozeniHrac, false);
             obnovitStatus(hrac, prisera);
-            if (prisera.health <= 0) {
-                $("#statusBoje").html("Zabil jsi příšeru!<br> Získáváš " + (prisera.level * 5) + " zlata.");
-                $("#utokBtn").prop('disabled', true);
-                $("#kouzloBtn").prop('disabled', true);
-                setTimeout(function () {
-                    $("#hra").load("game.html"); 
-                    setTimeout(function(){
-                        $("#utokBtn").prop('disabled', false);
-                        $("#kouzloBtn").prop('disabled', false);
-                        prisera.obnoveni();
-                        hrac.maxHealth = hrac.maxHealth+((prisera.level)*10);
-                        hrac.upravitZivoty(hrac.maxHealth, true);
-                        hrac.upravitZlato((prisera.level * 5), true); 
-                        $("#zlato").text(hrac.gold); 
-                        $("#zlato").empty();                     
-                        hra(hrac, prisera, obchodnik, vestec, ls);
-                    }, 100);
-                }, 5000); 
-            }
+            priseraSmrt(hrac, prisera, obchodnik, vestec, ls);
             setTimeout(function () {
                 if (prisera.health > 0) {
-                    $("#statusBoje").html("Příšera zraňuje " + hrac.name + "<br> poškozením " + poskozeniPrisera);
+                    $("#statusBoje").html("<b>Příšera</b> zraňuje " + hrac.name + "<br> poškozením " + poskozeniPrisera);
                     hrac.upravitZivoty(poskozeniPrisera, false);
                     obnovitStatus(hrac, prisera);
                     if (hrac.health <= 0) {
@@ -225,6 +214,63 @@
                 $("#utokBtn").prop('disabled', false);
                 $("#kouzloBtn").prop('disabled', false);
             }, 1500);
+        });
+        $("#kouzloBtn").click(function () {
+            console.log("pocet k: " + pocetKouzla);
+            let nazevPredmetu = $("#kouzloVybrat").val();
+            console.log("nazev item: " + nazevPredmetu);
+            let predmet = obchodnik.najitPredmet(nazevPredmetu);
+            console.log("nalezený item: " + predmet);
+            if (predmet.manaCost <= hrac.mana) {
+                pocetKouzla++;
+                if (pocetKouzla <= 2) {
+                    let min = hrac.minDam;
+                    let max = hrac.maxDam;
+                    let eI = hrac.equippedItem;
+                    hrac.equippedItem = predmet;
+                    if (hrac.equippedItem !== null) {
+                        if (hrac.equippedItem.type === prisera.weak) {
+                            let min = hrac.equippedItem.minDam;
+                            let max = hrac.equippedItem.maxDam;
+                            min += min * 2;
+                            max += max * 2;
+                            console.log("dmg: " + min + "-" + max);
+                            hrac.upravitPoskozeni(Number(min).toFixed(0), Number(max).toFixed(0));
+                            console.log(hrac.minDam + "-" + hrac.maxDam);
+                        } else {
+                            hrac.upravitPoskozeni(hrac.equippedItem.minDam, hrac.equippedItem.maxDam);
+                        }
+                    }
+                    poskozeniHrac = hrac.utok();
+                    $("#statusBoje").html(hrac.name + " zraňuje příšeru kouzlem s<br> poškozením " + poskozeniHrac);
+                    hrac.equippedItem = eI;
+                    prisera.upravitZivoty(poskozeniHrac, false);
+                    hrac.upravitPoskozeni(min, max);
+                    obnovitStatus(hrac, prisera);
+                }
+                if (pocetKouzla === 2) {
+                    pocetKouzla = 0;
+                    priseraSmrt(hrac, prisera, obchodnik, vestec, ls);
+                    poskozeniPrisera = prisera.utok();
+                    setTimeout(function () {
+                        if (prisera.health > 0) {
+                            $("#statusBoje").html("<b>Příšera</b> zraňuje " + hrac.name + "<br> poškozením " + poskozeniPrisera);
+                            hrac.upravitZivoty(poskozeniPrisera, false);
+                            obnovitStatus(hrac, prisera);
+                            if (hrac.health <= 0) {
+                                $("#statusBoje").html("Příšera tě zabila!<br> <small>Budeš přesměrován/a do hlavního menu</small>");
+                                setTimeout(function () { location.reload(); }, 6500);
+                            }
+                        }
+                        $("#utokBtn").prop('disabled', false);
+                        $("#kouzloBtn").prop('disabled', false);
+                    }, 1500);
+                }
+            } else {
+                $("#statusBoje").text("Nemáš dostatek many!");
+            }
+
+
         });
         // $("#malyLektvZ").click(function(){
         //     $("#malyLektvZ").text("X");
@@ -238,7 +284,7 @@
         //         console.log(hrac.inventory);
         //         obnovitStatus(hrac, prisera);
         //     }
-            
+
         // });
         // $("#stredniLektvZ").click(function(){
         //     $("#stredniLektvZ").text("X");
@@ -326,11 +372,68 @@
         // });
 
     }
+    function priseraSmrt(hrac, prisera, obchodnik, vestec, ls) {
+        if (prisera.health <= 0) {
+            prisera.obnoveni();
+            $("#statusBoje").html("Zabil jsi příšeru!<br> Získáváš " + (prisera.level * 10) + " zlata.");
+            $("#utokBtn").prop('disabled', true);
+            $("#kouzloBtn").prop('disabled', true);
+            setTimeout(function () {
+                $("#hra").load("game.html");
+                setTimeout(function () {
+                    let zv, mn, zl;
+                    switch (hrac.race) {
+                        case 'clovek':
+                            zv = hrac.maxHealth + ((prisera.level) * 10);
+                            mn = 5;
+                            zl = prisera.level * 10;
+                            break;
+                        case 'trpaslik':
+                            zv = hrac.maxHealth + ((prisera.level) * 8);
+                            mn = 2;
+                            zl = prisera.level * 12;
+                            break;
+                        case 'elf':
+                            zv = hrac.maxHealth + ((prisera.level) * 12);
+                            mn = 1;
+                            zl = prisera.level * 10;
+                            break;
+                        case 'carodej':
+                            zv = hrac.maxHealth + ((prisera.level) * 9);
+                            mn = 10;
+                            zl = prisera.level * 10;
+                            break;
+                    
+                    }
+                    hrac.maxHealth = zv;
+                    hrac.upravitZivoty(hrac.maxHealth, true);
+                    hrac.upravitZlato(zl, true);
+                    hrac.upravitManu(mn, true);
+                    if (hrac.maxHealth >= 1000) {
+                        $("#zivot").css("top", "142pt");
+                        $("#zivot").css("font-size", "1.5em");
+                        if (hrac.minDam >= 1000) {
+                            $("#poskozeni").css("top", "222pt");
+                            $("#poskozeni").css("font-size", "1.5em");
+                            $("#poskozeniM").css("top", "130pt");
+                            $("#poskozeniM").css("font-size", "1.5em");
+                        }
+
+                    }
+                    $("#zlato").text(hrac.gold);
+                    $("#zlato").empty();
+                    hra(hrac, prisera, obchodnik, vestec, ls);
+                }, 100);
+            }, 5000);
+            $("#utokBtn").prop('disabled', false);
+            $("#kouzloBtn").prop('disabled', false);
+        }
+    }
     function obnovitStatus(hrac, prisera) {
         //hrac
         $("#jmeno").text(hrac.name);
         $("#rasa").text(hrac.race);
-        $("#zivot").text(hrac.health+"/"+hrac.maxHealth);
+        $("#zivot").text(hrac.health + "/" + hrac.maxHealth);
         $("#mana").text(hrac.mana);
         $("#poskozeni").text(hrac.minDam + "-" + hrac.maxDam);
         $("#zlato").text(hrac.gold);
@@ -339,24 +442,24 @@
         $("#zivotM").text(prisera.health);
         $("#poskozeniM").text(prisera.minDam + "-" + prisera.maxDam);
         //lektvary
-            // let predmet = hrac.najitPredmet("Malý lektvar zdraví");
-            // $("#malyLektvZ").text((predmet[0] === undefined) ? "X" : " ");
-            // let predmet1 = hrac.najitPredmet("Střední lektvar zdraví");
-            // $("#stredniLektvZ").text((predmet1[0] === undefined) ? "X" : " ");
-            // let predmet2 = hrac.najitPredmet("Velký lektvar zdraví");
-            // $("#velkyLektvZ").text((predmet2[0] === undefined) ? "X" : " ");
-            // let predmet3 = hrac.najitPredmet("Lektvar života");
-            // $("#lektvZ").text((predmet3[0] === undefined) ? "X" : " ");
+        // let predmet = hrac.najitPredmet("Malý lektvar zdraví");
+        // $("#malyLektvZ").text((predmet[0] === undefined) ? "X" : " ");
+        // let predmet1 = hrac.najitPredmet("Střední lektvar zdraví");
+        // $("#stredniLektvZ").text((predmet1[0] === undefined) ? "X" : " ");
+        // let predmet2 = hrac.najitPredmet("Velký lektvar zdraví");
+        // $("#velkyLektvZ").text((predmet2[0] === undefined) ? "X" : " ");
+        // let predmet3 = hrac.najitPredmet("Lektvar života");
+        // $("#lektvZ").text((predmet3[0] === undefined) ? "X" : " ");
 
-            // let predmet4 = hrac.najitPredmet("Malý lektvar many");
-            // $("#malyLektvM").text((predmet4[0] === undefined) ? "X" : " ");
-            // let predmet5 = hrac.najitPredmet("Střední lektvar many");
-            // $("#stredniLektvM").text((predmet5[0] === undefined) ? "X" : " ");
-            // let predmet6 = hrac.najitPredmet("Velký lektvar many");
-            // $("#velkyLektvM").text((predmet6[0] === undefined) ? "X" : " ");
-            // let predmet7 = hrac.najitPredmet("Lektvar magické síly");
-            // $("#lektvM").text((predmet7[0] === undefined) ? "X" : " ");
-        
+        // let predmet4 = hrac.najitPredmet("Malý lektvar many");
+        // $("#malyLektvM").text((predmet4[0] === undefined) ? "X" : " ");
+        // let predmet5 = hrac.najitPredmet("Střední lektvar many");
+        // $("#stredniLektvM").text((predmet5[0] === undefined) ? "X" : " ");
+        // let predmet6 = hrac.najitPredmet("Velký lektvar many");
+        // $("#velkyLektvM").text((predmet6[0] === undefined) ? "X" : " ");
+        // let predmet7 = hrac.najitPredmet("Lektvar magické síly");
+        // $("#lektvM").text((predmet7[0] === undefined) ? "X" : " ");
+
     }
     //OBCHODNIK
     function obchod(hrac, prisera, obchodnik, vestec, ls) {
@@ -364,7 +467,7 @@
         $("#predmetVybrat").empty();
         //vybrat předmět
         hrac.vypsatInventar("#predmetVybrat", "select");
-        $("#potvrdit").click(function(){
+        $("#potvrdit").click(function () {
             let nazevPredmetu = $("#typVybrat").val();
             //option podle předchozí volby
             switch (nazevPredmetu) {
@@ -392,37 +495,50 @@
                     break;
             }
         });
-        $("#koupitPredmet").click(function(){
+        $("#koupitPredmet").click(function () {
             let nazevPredmetu = $("#predmet1Vybrat").val();
             let predmet = obchodnik.najitPredmet(nazevPredmetu);
             let hracPredmet = hrac.najitPredmet(nazevPredmetu);
-            if(hracPredmet[0] === 0) {
+            if (hracPredmet[0] === 0) {
                 hracPredmet = "0";
             } else {
                 hracPredmet = hracPredmet[0].name;
             }
-            if((hrac.gold >= predmet.itemValue) && (nazevPredmetu !== hracPredmet)) {
+            if ((hrac.gold >= predmet.itemValue) && (nazevPredmetu !== hracPredmet)) {
                 hrac.upravitZlato(predmet.itemValue, false);
-                console.log("ZLATO: "+hrac.gold);
+                console.log("ZLATO: " + hrac.gold);
                 hrac.koupit(predmet);
                 $("#predmetVybrat").empty();
                 hrac.vypsatInventar("#predmetVybrat", "select");
                 $("#zlato").text(hrac.gold);
+                $("#status").css("display", "initial");
+                $("#status").addClass("status");
+                $("#status").html("Zakoupil si předmět! <small>Nezapomeň se <u>zbraní</u> vybavit v inventáři!</small>");
+                setTimeout(function () {
+                    $("#status").css("display", "none");
+                    $("#status").removeClass("status");
+                }, 3000);
             } else {
-                console.log("Nemáš dostatek zlata nebo je předmět už koupený!");
+                $("#status").css("display", "initial");
+                $("#status").text("Nemáš dostatek zlata nebo je předmět už koupený!");
+                setTimeout(function () {
+                    $("#status").css("display", "none");
+                }, 3000);
             }
         });
-        $("#prodatPredmet").click(function(){
-            if (hrac.inventory.length !== 0){
+        $("#prodatPredmet").click(function () {
+            if (hrac.inventory.length !== 0) {
                 let nazevPredmetu = $("#predmetVybrat").val();
                 let predmet = obchodnik.najitPredmet(nazevPredmetu);
-                let cenaPredmet = predmet.itemValue*0.75;
-                hrac.upravitZlato(cenaPredmet , true);
-                console.log("eq object name: "+hrac.equippedItem.name+" nazev pr: "+nazevPredmetu);
-                if (hrac.equippedItem.name === nazevPredmetu) {
-                    hrac.equippedItem = null;
-                    hrac.upravitPoskozeni(5, 10);
+                let cenaPredmet = predmet.itemValue * 0.75;
+                hrac.upravitZlato(cenaPredmet, true);
+                if (hrac.equippedItem !== null) {
+                    if (hrac.equippedItem.name === nazevPredmetu) {
+                        hrac.equippedItem = null;
+                        hrac.upravitPoskozeni(5, 10);
+                    }
                 }
+
                 predmet = hrac.odstranitPredmet(nazevPredmetu);
                 hrac.inventory = predmet;
                 $("#zlato").empty();
@@ -430,31 +546,38 @@
                 $("#predmetVybrat").empty();
                 hrac.vypsatInventar("#predmetVybrat", "select");
             }
-            
+
         });
-        $("#odejitBtn").click(function(){
+        $("#odejitBtn").click(function () {
             $("#hra").load("game.html");
-            setTimeout(function(){
+            setTimeout(function () {
                 hra(hrac, prisera, obchodnik, vestec, ls);
             }, 100);
         });
     }
     //INVENTÁŘ
-    function inventar(hrac, prisera, obchodnik, vestec, ls){
+    function inventar(hrac, prisera, obchodnik, vestec, ls) {
         $(".listWrapper").empty();
         $("#predmetVybrat").empty();
         $("#zlato").text(hrac.gold);
         hrac.vypsatInventar(".listWrapper", "list");
         hrac.vypsatInventar("#predmetVybrat", "selectVybavit");
-        $("#vybavit").click(function(){
+        $("#vybavit").click(function () {
             let nazevPredmetu = $("#predmetVybrat").val();
             let predmet = obchodnik.najitPredmet(nazevPredmetu);
             hrac.equippedItem = predmet;
             hrac.upravitPoskozeni(predmet.minDam, predmet.maxDam);
+            $("#status").addClass("status");
+            $("#status").css("display", "initial");
+            $("#status").text("Vybavil ses předmětem!");
+            setTimeout(function () {
+                $("#status").css("display", "none");
+                $("#status").removeClass("status");
+            }, 3000);
         });
-        $("#odejitBtn").click(function(){
+        $("#odejitBtn").click(function () {
             $("#hra").load("game.html");
-            setTimeout(function(){
+            setTimeout(function () {
                 hra(hrac, prisera, obchodnik, vestec, ls);
             }, 100);
         });
@@ -464,7 +587,7 @@
         $("#zlato").text(hrac.gold);
         $("#vyhodaBtn").text("Zjistit výhodu");
         let prvniPokus = false;
-        $("#vyhodaBtn").click(function (){
+        $("#vyhodaBtn").click(function () {
             if (prvniPokus === false) {
                 $("#vypisVyhody").text(vestec.vypsatVyhodu(prisera.weak));
                 $("#vyhodaBtn").text("Zjistit výhodu (50 zl)");
@@ -475,11 +598,11 @@
                 $("#vyhodaBtn").text("Zjistit výhodu (50 zl)");
                 $("#zlato").text(hrac.gold);
             }
-            
+
         });
-        $("#odejitBtn").click(function(){
+        $("#odejitBtn").click(function () {
             $("#hra").load("game.html");
-            setTimeout(function(){
+            setTimeout(function () {
                 hra(hrac, prisera, obchodnik, vestec, ls);
             }, 100);
         });

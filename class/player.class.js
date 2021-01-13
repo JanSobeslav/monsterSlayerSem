@@ -137,6 +137,14 @@ class Player {
 
             });
         }
+        if (typ === "selectKouzla"){
+            $.each(this.inventory, function (index, value) {
+                if (value.type === 'fspell' || value.type === 'wspell'){
+                    opn = "<option value='" + value.name + "'>" + value.name + " (" + value.minDam + "-" + value.maxDam + ")</option>";
+                    $(id).append(opn);
+                }
+            });
+        }
         if (typ === "list") {
             $.each(this.inventory, function (index, value) {
                 switch (value.type) {
