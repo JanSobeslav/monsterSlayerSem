@@ -112,29 +112,10 @@ class Player {
         }
         if (typ === "selectVybavit") {
             $.each(this.inventory, function (index, value) {
-                switch (value.type) {
-                    case 'sword':
-                        opn = "<option value='" + value.name + "'>" + value.name + " (" + value.minDam + "-" + value.maxDam + ")</option>";
-                        $(id).append(opn);
-                        break;
-                        
-                    case 'axe':
-                        opn = "<option value='" + value.name + "'>" + value.name + " (" + value.minDam + "-" + value.maxDam + ")</option>";
-                        $(id).append(opn);
-                        break;
-                    
-                    case 'flail':
-                        opn = "<option value='" + value.name + "'>" + value.name + " (" + value.minDam + "-" + value.maxDam + ")</option>";
-                        $(id).append(opn);
-                        break;
-
-                    case 'bow':
-                        opn = "<option value='" + value.name + "'>" + value.name + " (" + value.minDam + "-" + value.maxDam + ")</option>";
-                        $(id).append(opn);
-                        break;
+                if (value.type !== 'fspell' || value.type !== 'wspell' || value.type !== 'potion') {
+                    opn = "<option value='" + value.name + "'>" + value.name + " (" + value.minDam + "-" + value.maxDam + ")</option>";
+                    $(id).append(opn);
                 }
-                
-
             });
         }
         if (typ === "selectKouzla"){

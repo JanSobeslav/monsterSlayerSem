@@ -15,10 +15,14 @@
 </head>
 
 <body>
+    <audio autoplay loop id="music">
+            <source src="assets/menuMusic.mp3" type="audio/mpeg">
+        </audio>
     <div id="hra">
         <div class="hlavniMenu">
             <h1>Lovec příšer</h1>
             <div class="menu">
+                <button id="spustit">SPUSTIT HRU</button>
                 <button id="nova">NOVÁ HRA</button>
                 <button id="nacist">NAČÍST HRU</button>
                 <!-- <button>Admin</button> -->
@@ -44,12 +48,26 @@
 </html>
 <script>
     $(document).ready(function () {
+        $("#nova").css("display", "none");
+        $("#nacist").css("display", "none");
+        $("h1").css("display", "none");
+        //let music = document.getElementById("music");        
         let hrac, prisera;
         const ls = new LocalStorage();
+        
+        //SPUSTIT
+        $("#spustit").click(function(){
+            $("#music")[0].play();
+            $("#nova").css("display", "initial");
+            $("#nacist").css("display", "initial");
+            $("#spustit").css("display", "none");
+            $("h1").css("display", "initial");
+        });
         //NOVA HRA
         $("#nova").click(function () {
             $("#novaHraForm").css("display", "grid");
             $("#nacistHruForm").css("display", "none");
+            
         });
         $("#ok").click(function () {
             let jm = $("#jmenoForm").val();
@@ -86,7 +104,10 @@
                 prisera = new Monster();
                 obchodnik = new Merchant();
                 vestec = new Oracle();
+                $("#music").stop();
                 $("#hra").load("game.html");
+                $("#music").attr("src", "assets/gameMusic.mp3");
+                $("#music")[0].play();
                 setTimeout(function () { hra(hrac, prisera, obchodnik, vestec, ls); }, 100);
             } else {
                 $("#jmenoForm").attr('placeholder', 'MUSÍTE VYPLNIT JMÉNO!!!');
@@ -129,6 +150,9 @@
         //boj
         $("#vyprava").click(function () {
             $("#hra").load("fight.html");
+            $("#music").stop();
+            $("#music").attr("src", "assets/fightMusic.mp3");
+            $("#music")[0].play();
             setTimeout(function () { boj(hrac, prisera, obchodnik, vestec, ls); }, 100);
         });
         //uložit
@@ -247,6 +271,7 @@
                     prisera.upravitZivoty(poskozeniHrac, false);
                     hrac.upravitPoskozeni(min, max);
                     obnovitStatus(hrac, prisera);
+                    priseraSmrt(hrac, prisera, obchodnik, vestec, ls); //ZJISTIT, JESTLI ANO/NE => nešel server -> neodzkoušeno!!!!
                 }
                 if (pocetKouzla === 2) {
                     pocetKouzla = 0;
@@ -374,41 +399,44 @@
     }
     function priseraSmrt(hrac, prisera, obchodnik, vestec, ls) {
         if (prisera.health <= 0) {
-            prisera.obnoveni();
             $("#statusBoje").html("Zabil jsi příšeru!<br> Získáváš " + (prisera.level * 10) + " zlata.");
             $("#utokBtn").prop('disabled', true);
             $("#kouzloBtn").prop('disabled', true);
             setTimeout(function () {
+                $("#music").stop();
+                $("#music").attr("src", "assets/gameMusic.mp3");
+                $("#music")[0].play();
                 $("#hra").load("game.html");
                 setTimeout(function () {
                     let zv, mn, zl;
                     switch (hrac.race) {
-                        case 'clovek':
-                            zv = hrac.maxHealth + ((prisera.level) * 10);
+                        case 'Člověk':
+                            zv = hrac.maxHealth + ((prisera.level+1) * 10);
                             mn = 5;
                             zl = prisera.level * 10;
                             break;
-                        case 'trpaslik':
-                            zv = hrac.maxHealth + ((prisera.level) * 8);
+                        case 'Trpaslík':
+                            zv = hrac.maxHealth + ((prisera.level+1) * 8);
                             mn = 2;
                             zl = prisera.level * 12;
                             break;
-                        case 'elf':
-                            zv = hrac.maxHealth + ((prisera.level) * 12);
+                        case 'Elf':
+                            zv = hrac.maxHealth + ((prisera.level+1) * 12);
                             mn = 1;
                             zl = prisera.level * 10;
                             break;
-                        case 'carodej':
-                            zv = hrac.maxHealth + ((prisera.level) * 9);
+                        case 'Čaroděj':
+                            zv = hrac.maxHealth + ((prisera.level+1) * 9);
                             mn = 10;
                             zl = prisera.level * 10;
                             break;
                     
                     }
+                    hrac.upravitZlato(zl, true);
                     hrac.maxHealth = zv;
                     hrac.upravitZivoty(hrac.maxHealth, true);
-                    hrac.upravitZlato(zl, true);
                     hrac.upravitManu(mn, true);
+                    prisera.obnoveni();
                     if (hrac.maxHealth >= 1000) {
                         $("#zivot").css("top", "142pt");
                         $("#zivot").css("font-size", "1.5em");

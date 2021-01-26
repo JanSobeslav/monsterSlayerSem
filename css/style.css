@@ -6,6 +6,13 @@
     background-position: left top;
     background-attachment: scroll;
 }
+#spustit {
+    position: absolute;
+    left: 160pt;
+    top: -55pt;
+    height: 100pt;
+    width: 100pt;
+}
 .menu {
     position: absolute;
     left: 100pt;
