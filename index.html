@@ -16,7 +16,7 @@
 
 <body>
     <audio autoplay loop id="music">
-            <source src="assets/menuMusic.mp3" type="audio/mpeg">
+            <!--<source src="assets/menuMusic.mp3" type="audio/mpeg">-->
         </audio>
     <div id="hra">
         <div class="hlavniMenu">
@@ -57,6 +57,7 @@
         
         //SPUSTIT
         $("#spustit").click(function(){
+            $("#music").attr("src", "assets/menuMusic.mp3");
             $("#music")[0].play();
             $("#nova").css("display", "initial");
             $("#nacist").css("display", "initial");
@@ -110,7 +111,9 @@
                 $("#music")[0].play();
                 setTimeout(function () { hra(hrac, prisera, obchodnik, vestec, ls); }, 100);
             } else {
-                $("#jmenoForm").attr('placeholder', 'MUSÍTE VYPLNIT JMÉNO!!!');
+                $("#jmenoForm").attr('placeholder', 'NAPIŠ SVÉ JMÉNO!');
+                $("#jmenoForm").css("background-color", "darkred");
+                setTimeout(function () { $("#jmenoForm").css("background-color", "rgb(102, 72, 47)"); }, 1000);
             }
         });
         //NAČÍST HRU
@@ -225,8 +228,8 @@
             prisera.upravitZivoty(poskozeniHrac, false);
             obnovitStatus(hrac, prisera);
             priseraSmrt(hrac, prisera, obchodnik, vestec, ls);
-            setTimeout(function () {
-                if (prisera.health > 0) {
+            if (prisera.health > 0) {
+                setTimeout(function () {
                     $("#statusBoje").html("<b>Příšera</b> zraňuje " + hrac.name + "<br> poškozením " + poskozeniPrisera);
                     hrac.upravitZivoty(poskozeniPrisera, false);
                     obnovitStatus(hrac, prisera);
@@ -234,10 +237,10 @@
                         $("#statusBoje").html("Příšera tě zabila!<br> <small>Budeš přesměrován/a do hlavního menu</small>");
                         setTimeout(function () { location.reload(); }, 6500);
                     }
-                }
-                $("#utokBtn").prop('disabled', false);
-                $("#kouzloBtn").prop('disabled', false);
-            }, 1500);
+                    $("#utokBtn").prop('disabled', false);
+                    $("#kouzloBtn").prop('disabled', false);
+                }, 1500);
+            }
         });
         $("#kouzloBtn").click(function () {
             console.log("pocet k: " + pocetKouzla);
