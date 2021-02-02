@@ -7,8 +7,6 @@
     <meta name="generator">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
-    <!-- instrukce pro W aplikace Edge, Explorer,... -->
     <link rel="stylesheet" href="css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Lovec příšer</title>
@@ -16,8 +14,8 @@
 
 <body>
     <audio autoplay loop id="music">
-            <!--<source src="assets/menuMusic.mp3" type="audio/mpeg">-->
-        </audio>
+        <!--<source src="assets/menuMusic.mp3" type="audio/mpeg">-->
+    </audio>
     <div id="hra">
         <div class="hlavniMenu">
             <h1>Lovec příšer</h1>
@@ -25,7 +23,6 @@
                 <button id="spustit">SPUSTIT HRU</button>
                 <button id="nova">NOVÁ HRA</button>
                 <button id="nacist">NAČÍST HRU</button>
-                <!-- <button>Admin</button> -->
                 <div id="novaHraForm">
                     <input type="text" id="jmenoForm" name="jmenoForm" placeholder="Napiš jméno tvojí postavy!">
                     <select name="rasa" id="vyberRasa">
@@ -39,7 +36,6 @@
                 <div id="nacistHruForm">
                     <p id="ulozText">Jméno hráče + datum + čas</p>
                 </div>
-
             </div>
         </div>
     </div>
@@ -51,12 +47,10 @@
         $("#nova").css("display", "none");
         $("#nacist").css("display", "none");
         $("h1").css("display", "none");
-        //let music = document.getElementById("music");        
         let hrac, prisera;
         const ls = new LocalStorage();
-        
         //SPUSTIT
-        $("#spustit").click(function(){
+        $("#spustit").click(function () {
             $("#music").attr("src", "assets/menuMusic.mp3");
             $("#music")[0].play();
             $("#nova").css("display", "initial");
@@ -68,7 +62,6 @@
         $("#nova").click(function () {
             $("#novaHraForm").css("display", "grid");
             $("#nacistHruForm").css("display", "none");
-            
         });
         $("#ok").click(function () {
             let jm = $("#jmenoForm").val();
@@ -105,6 +98,7 @@
                 prisera = new Monster();
                 obchodnik = new Merchant();
                 vestec = new Oracle();
+                vestec.pokus = false;
                 $("#music").stop();
                 $("#hra").load("game.html");
                 $("#music").attr("src", "assets/gameMusic.mp3");
@@ -138,18 +132,25 @@
             obchodnik = new Merchant();
             vestec = new Oracle();
             console.log(hrac.name + " - " + hrac.race + " - " + hrac.gold);
+            $("#music").stop();
             $("#hra").load("game.html");
+            $("#music").attr("src", "assets/gameMusic.mp3");
+            $("#music")[0].play();
             setTimeout(function () { hra(hrac, prisera, obchodnik, vestec, ls); }, 100);
         });
     });
     //HRA
     function hra(hrac, prisera, obchodnik, vestec, ls) {
+        zmensitPismo(hrac);
         $("#jmeno").text(hrac.name);
         $("#rasa").text(hrac.race);
         $("#zivot").text(hrac.health);
         $("#mana").text(hrac.mana);
         $("#poskozeni").text(hrac.minDam + "-" + hrac.maxDam);
         $("#zlato").text(hrac.gold);
+        if (hrac.equippedItem === null) {
+            $("#nazevZbrane").text("Ruce");
+        } else $("#nazevZbrane").text(hrac.equippedItem.name);
         //boj
         $("#vyprava").click(function () {
             $("#hra").load("fight.html");
@@ -174,9 +175,7 @@
             }, 3000);
         });
         //konec
-        $("#konec").click(function () {
-            location.reload();
-        });
+        $("#konec").click(function () { location.reload(); });
         //obchodník
         $("#obchodnik").click(function () {
             $("#hra").load("store.html");
@@ -195,14 +194,13 @@
             console.log("věštec");
             setTimeout(function () { vestecDum(hrac, prisera, obchodnik, vestec, ls); }, 100);
         });
-
-
     }
     //BOJ
     function boj(hrac, prisera, obchodnik, vestec, ls) {
         let poskozeniHrac;
         let poskozeniPrisera;
         let pocetKouzla = 0;
+        zmensitPismo(hrac);
         if (hrac.equippedItem !== null) {
             if (hrac.equippedItem.type === prisera.weak) {
                 let min = hrac.equippedItem.minDam;
@@ -218,6 +216,7 @@
         }
         obnovitStatus(hrac, prisera);
         hrac.vypsatInventar("#kouzloVybrat", "selectKouzla");
+        hrac.vypsatInventar("#lektvarVybrat", "selectLektvary");
         //ÚTOK
         $("#utokBtn").click(function () {
             $("#utokBtn").prop('disabled', true);
@@ -236,18 +235,16 @@
                     if (hrac.health <= 0) {
                         $("#statusBoje").html("Příšera tě zabila!<br> <small>Budeš přesměrován/a do hlavního menu</small>");
                         setTimeout(function () { location.reload(); }, 6500);
+                    } else {
+                        $("#utokBtn").prop('disabled', false);
+                        $("#kouzloBtn").prop('disabled', false);
                     }
-                    $("#utokBtn").prop('disabled', false);
-                    $("#kouzloBtn").prop('disabled', false);
                 }, 1500);
             }
         });
         $("#kouzloBtn").click(function () {
-            console.log("pocet k: " + pocetKouzla);
             let nazevPredmetu = $("#kouzloVybrat").val();
-            console.log("nazev item: " + nazevPredmetu);
             let predmet = obchodnik.najitPredmet(nazevPredmetu);
-            console.log("nalezený item: " + predmet);
             if (predmet.manaCost <= hrac.mana) {
                 pocetKouzla++;
                 if (pocetKouzla <= 2) {
@@ -269,12 +266,14 @@
                         }
                     }
                     poskozeniHrac = hrac.utok();
-                    $("#statusBoje").html(hrac.name + " zraňuje příšeru kouzlem s<br> poškozením " + poskozeniHrac);
+                    $("#statusBoje").html(hrac.name + " zraňuje příšeru kouzlem s<br> poškozením " 
+                    + poskozeniHrac + "<br>Kouzlem hraješ <u>2x</u>!<br><u>Použij znovu kouzlo nebo útok</u>!");
                     hrac.equippedItem = eI;
+                    hrac.upravitManu(predmet.manaCost, false);
                     prisera.upravitZivoty(poskozeniHrac, false);
                     hrac.upravitPoskozeni(min, max);
                     obnovitStatus(hrac, prisera);
-                    priseraSmrt(hrac, prisera, obchodnik, vestec, ls); //ZJISTIT, JESTLI ANO/NE => nešel server -> neodzkoušeno!!!!
+                    priseraSmrt(hrac, prisera, obchodnik, vestec, ls);
                 }
                 if (pocetKouzla === 2) {
                     pocetKouzla = 0;
@@ -297,108 +296,24 @@
             } else {
                 $("#statusBoje").text("Nemáš dostatek many!");
             }
-
-
         });
-        // $("#malyLektvZ").click(function(){
-        //     $("#malyLektvZ").text("X");
-        //     console.log("maly lektvar");
-        //     let predmet = hrac.najitPredmet("Malý lektvar zdraví");
-        //     if (predmet[0] === undefined){
-        //         console.log("nenalezeno");
-        //     } else {
-        //         hrac.upravitZivoty(predmet[0].effect, true)
-        //         delete hrac.inventory[predmet[2]];
-        //         console.log(hrac.inventory);
-        //         obnovitStatus(hrac, prisera);
-        //     }
-
-        // });
-        // $("#stredniLektvZ").click(function(){
-        //     $("#stredniLektvZ").text("X");
-        //     console.log("stredni lektvar");
-        //     let predmet = hrac.najitPredmet("Střední lektvar zdraví");
-        //     if (predmet[0] === undefined){
-        //         console.log("nenalezeno");
-        //     } else {
-        //         hrac.upravitZivoty(predmet[0].effect, true)
-        //         hrac.inventory.slice(predmet[2],predmet[2]+1);
-        //     }
-        //     obnovitStatus(hrac, prisera);
-        // });
-        // $("#velkyLektvZ").click(function(){
-        //     $("#velkyLektvZ").text("X");
-        //     console.log("velky lektvar");
-        //     let predmet = hrac.najitPredmet("Velký lektvar zdraví");
-        //     if (predmet[0] === undefined){
-        //         console.log("nenalezeno");
-        //     } else {
-        //         hrac.upravitZivoty(predmet[0].effect, true)
-        //         hrac.inventory.slice(predmet[2],predmet[2]+1);
-        //     }
-        //     obnovitStatus(hrac, prisera);
-        // });
-        // $("#lektvZ").click(function(){
-        //     $("#lektvZ").text("X");
-        //     console.log("zivot lektvar");
-        //     let predmet = hrac.najitPredmet("Lektvar života");
-        //     if (predmet[0] === undefined){
-        //         console.log("nenalezeno");
-        //     } else {
-        //         hrac.upravitZivoty(predmet[0].effect, true)
-        //         hrac.inventory.slice(predmet[2],predmet[2]+1);
-        //     }
-        //     obnovitStatus(hrac, prisera);
-        // });
-        // $("#malyLektvM").click(function(){
-        //     $("#malyLektvM").text("X");
-        //     console.log("maly m lektvar");
-        //     let predmet = hrac.najitPredmet("Malý lektvar many");
-        //     if (predmet[0] === undefined){
-        //         console.log("nenalezeno");
-        //     } else {
-        //         hrac.upravitManu(predmet[0].effect, true)
-        //         hrac.inventory.slice(predmet[2],predmet[2]+1);
-        //     }
-        //     obnovitStatus(hrac, prisera);
-        // });
-        // $("#stredniLektvM").click(function(){
-        //     $("#stredniLektvM").text("X");
-        //     console.log("stredni m lektvar");
-        //     let predmet = hrac.najitPredmet("Střední lektvar many");
-        //     if (predmet[0] === undefined){
-        //         console.log("nenalezeno");
-        //     } else {
-        //         hrac.upravitManu(predmet[0].effect, true)
-        //         hrac.inventory.slice(predmet[2],predmet[2]+1);
-        //     }
-        //     obnovitStatus(hrac, prisera);
-        // });
-        // $("#velkyLektvM").click(function(){
-        //     $("#velkyLektvM").text("X");
-        //     console.log("velky m lektvar");
-        //     let predmet = hrac.najitPredmet("Velký lektvar many");
-        //     if (predmet[0] === undefined){
-        //         console.log("nenalezeno");
-        //     } else {
-        //         hrac.upravitManu(predmet[0].effect, true)
-        //         hrac.inventory.slice(predmet[2],predmet[2]+1);
-        //     }
-        //     obnovitStatus(hrac, prisera);
-        // });
-        // $("#lektvM").click(function(){
-        //     $("#lektvM").text("X");
-        //     console.log("m lektvar");
-        //     let predmet = hrac.najitPredmet("Lektvar magické síly");
-        //     if (predmet[0] === undefined){
-        //         console.log("nenalezeno");
-        //     } else {
-        //         hrac.upravitManu(predmet[0].effect, true)
-        //         hrac.inventory.slice(predmet[2],predmet[2]+1);
-        //     }
-        //     obnovitStatus(hrac, prisera);
-        // });
-
+        //LEKTVAR
+        $("#lektvarBtn").click(function () {
+            let nazevPredmetu = $("#lektvarVybrat").val();
+            let predmet = obchodnik.najitPredmet(nazevPredmetu);
+            if (predmet.t === 0) {
+                hrac.upravitZivoty(predmet.effect, true);
+                if (hrac.health > hrac.maxHealth) hrac.health = hrac.maxHealth;
+            } else {
+                hrac.upravitManu(predmet.effect, true);
+            }
+            predmet = hrac.odstranitPredmet(nazevPredmetu);
+            hrac.inventory = predmet;
+            $("#lektvarVybrat").empty();
+            $("#lektvarVybrat").append(new Option("--vyber lektvar--", ""));
+            hrac.vypsatInventar("#lektvarVybrat", "selectLektvary");
+            obnovitStatus(hrac, prisera);
+        });
     }
     function priseraSmrt(hrac, prisera, obchodnik, vestec, ls) {
         if (prisera.health <= 0) {
@@ -410,55 +325,54 @@
                 $("#music").attr("src", "assets/gameMusic.mp3");
                 $("#music")[0].play();
                 $("#hra").load("game.html");
+                vestec.pokus = false;
                 setTimeout(function () {
                     let zv, mn, zl;
                     switch (hrac.race) {
                         case 'Člověk':
-                            zv = hrac.maxHealth + ((prisera.level+1) * 10);
-                            mn = 5;
-                            zl = prisera.level * 10;
+                            zv = hrac.maxHealth + ((prisera.level + 1) * 10);
+                            mn = 0.3 * prisera.level;
+                            zl = prisera.level * 11;
                             break;
                         case 'Trpaslík':
-                            zv = hrac.maxHealth + ((prisera.level+1) * 8);
-                            mn = 2;
-                            zl = prisera.level * 12;
+                            zv = hrac.maxHealth + ((prisera.level + 1) * 8);
+                            mn = 0.25 * prisera.level;
+                            zl = prisera.level * 15;
                             break;
                         case 'Elf':
-                            zv = hrac.maxHealth + ((prisera.level+1) * 12);
-                            mn = 1;
+                            zv = hrac.maxHealth + ((prisera.level + 1) * 12);
+                            mn = 0.7 * priser.level;
                             zl = prisera.level * 10;
                             break;
                         case 'Čaroděj':
-                            zv = hrac.maxHealth + ((prisera.level+1) * 9);
-                            mn = 10;
+                            zv = hrac.maxHealth + ((prisera.level + 1) * 9);
+                            mn = 2 * prisera.level;
                             zl = prisera.level * 10;
                             break;
-                    
                     }
                     hrac.upravitZlato(zl, true);
                     hrac.maxHealth = zv;
                     hrac.upravitZivoty(hrac.maxHealth, true);
                     hrac.upravitManu(mn, true);
                     prisera.obnoveni();
-                    if (hrac.maxHealth >= 1000) {
-                        $("#zivot").css("top", "142pt");
-                        $("#zivot").css("font-size", "1.5em");
-                        if (hrac.minDam >= 1000) {
-                            $("#poskozeni").css("top", "222pt");
-                            $("#poskozeni").css("font-size", "1.5em");
-                            $("#poskozeniM").css("top", "130pt");
-                            $("#poskozeniM").css("font-size", "1.5em");
-                        }
-
-                    }
-                    $("#zlato").text(hrac.gold);
-                    $("#zlato").empty();
                     hra(hrac, prisera, obchodnik, vestec, ls);
                 }, 100);
             }, 5000);
-            $("#utokBtn").prop('disabled', false);
-            $("#kouzloBtn").prop('disabled', false);
         }
+    }
+    function zmensitPismo(hrac) {
+        if (hrac.maxHealth >= 1000) {
+            $("#zivot").css("top", "142pt");
+            $("#zivot").css("font-size", "1.5em");
+            if (hrac.minDam >= 1000) {
+                $("#poskozeni").css("top", "222pt");
+                $("#poskozeni").css("font-size", "1.5em");
+                $("#poskozeniM").css("top", "130pt");
+                $("#poskozeniM").css("font-size", "1.5em");
+            }
+        }
+        $("#zlato").text(hrac.gold);
+        $("#zlato").empty();
     }
     function obnovitStatus(hrac, prisera) {
         //hrac
@@ -472,25 +386,6 @@
         $("#urovenM").text(prisera.level);
         $("#zivotM").text(prisera.health);
         $("#poskozeniM").text(prisera.minDam + "-" + prisera.maxDam);
-        //lektvary
-        // let predmet = hrac.najitPredmet("Malý lektvar zdraví");
-        // $("#malyLektvZ").text((predmet[0] === undefined) ? "X" : " ");
-        // let predmet1 = hrac.najitPredmet("Střední lektvar zdraví");
-        // $("#stredniLektvZ").text((predmet1[0] === undefined) ? "X" : " ");
-        // let predmet2 = hrac.najitPredmet("Velký lektvar zdraví");
-        // $("#velkyLektvZ").text((predmet2[0] === undefined) ? "X" : " ");
-        // let predmet3 = hrac.najitPredmet("Lektvar života");
-        // $("#lektvZ").text((predmet3[0] === undefined) ? "X" : " ");
-
-        // let predmet4 = hrac.najitPredmet("Malý lektvar many");
-        // $("#malyLektvM").text((predmet4[0] === undefined) ? "X" : " ");
-        // let predmet5 = hrac.najitPredmet("Střední lektvar many");
-        // $("#stredniLektvM").text((predmet5[0] === undefined) ? "X" : " ");
-        // let predmet6 = hrac.najitPredmet("Velký lektvar many");
-        // $("#velkyLektvM").text((predmet6[0] === undefined) ? "X" : " ");
-        // let predmet7 = hrac.najitPredmet("Lektvar magické síly");
-        // $("#lektvM").text((predmet7[0] === undefined) ? "X" : " ");
-
     }
     //OBCHODNIK
     function obchod(hrac, prisera, obchodnik, vestec, ls) {
@@ -569,7 +464,6 @@
                         hrac.upravitPoskozeni(5, 10);
                     }
                 }
-
                 predmet = hrac.odstranitPredmet(nazevPredmetu);
                 hrac.inventory = predmet;
                 $("#zlato").empty();
@@ -577,7 +471,6 @@
                 $("#predmetVybrat").empty();
                 hrac.vypsatInventar("#predmetVybrat", "select");
             }
-
         });
         $("#odejitBtn").click(function () {
             $("#hra").load("game.html");
@@ -616,20 +509,26 @@
     //VĚŠTEC
     function vestecDum(hrac, prisera, obchodnik, vestec, ls) {
         $("#zlato").text(hrac.gold);
-        $("#vyhodaBtn").text("Zjistit výhodu");
-        let prvniPokus = false;
+        if (vestec.pokus === true) {
+            $("#vyhodaBtn").text("Zjistit výhodu (50 zl)");
+        } else {
+            $("#vyhodaBtn").text("Zjistit výhodu");
+        }
+        console.log("věštec (pokus): " + vestec.pokus);
+        $("#vypisVyhody").html("Vítej hrdino... vyzkoušej své štěstí, bude-li ti přáno získáš<br>vědění o slabině tvého příštího nepřítele!<br> Pamatuj, tvůj první pokus je zdarma!");
         $("#vyhodaBtn").click(function () {
-            if (prvniPokus === false) {
+            if (vestec.pokus === false || vestec.pokus === undefined) {
                 $("#vypisVyhody").text(vestec.vypsatVyhodu(prisera.weak));
                 $("#vyhodaBtn").text("Zjistit výhodu (50 zl)");
-                prvniPokus = true;
-            } else {
+                vestec.pokus = true;
+            } else if (hrac.gold >= 50) {
                 hrac.upravitZlato(50, false);
                 $("#vypisVyhody").text(vestec.vypsatVyhodu(prisera.weak));
                 $("#vyhodaBtn").text("Zjistit výhodu (50 zl)");
                 $("#zlato").text(hrac.gold);
+            } else {
+                $("#vypisVyhody").text("Nemáš dostatek zlata! Zaplať nebo zmiz!");
             }
-
         });
         $("#odejitBtn").click(function () {
             $("#hra").load("game.html");

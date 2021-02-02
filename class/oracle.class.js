@@ -1,6 +1,6 @@
 class Oracle {
     constructor() {
-
+        this.pokus = false;
     }
     vypsatVyhodu(benefit){
         let kostka = Math.floor(Math.random() * 11);

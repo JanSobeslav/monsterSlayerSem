@@ -117,6 +117,14 @@ h1 {
     font-size: 2em; /*1.5*/
     color: rgb(51, 54, 54);
 }
+#nazevZbrane {
+    position: absolute;
+    left: 80pt;
+    top: 245pt; 
+    font-size: 1em; 
+    color: rgb(0, 0, 0);
+    font-weight: bolder;
+}
 #zlato {
     position: absolute;
     left: 85pt;
@@ -245,6 +253,18 @@ h1 {
     cursor: pointer;
     background-color: mediumblue;
 }
+#lektvarBtn {
+    position: absolute;
+    left: 335pt;
+    top: 46pt;
+    font-size: 1em;
+    font-weight: 700;
+    background-color: mediumslateblue;
+}
+#lektvarBtn:hover {
+    cursor: pointer;
+    background-color: midnightblue;
+}
 #statusBoje {
     position: absolute;
     left: 210pt;
@@ -261,6 +281,14 @@ h1 {
     max-width: 90pt;
     font-weight: bold;
     background-color: lightblue;
+}
+#lektvarVybrat {
+    position: absolute;
+    left: 240pt;
+    top: 45pt;
+    max-width: 90pt;
+    font-weight: bold;
+    background-color: mediumpurple;
 }
 #lektvary p {
     position: absolute;

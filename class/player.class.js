@@ -112,7 +112,7 @@ class Player {
         }
         if (typ === "selectVybavit") {
             $.each(this.inventory, function (index, value) {
-                if (value.type !== 'fspell' || value.type !== 'wspell' || value.type !== 'potion') {
+                if (value.type !== 'fspell' && value.type !== 'wspell' && value.type !== 'potion') {
                     opn = "<option value='" + value.name + "'>" + value.name + " (" + value.minDam + "-" + value.maxDam + ")</option>";
                     $(id).append(opn);
                 }
@@ -122,6 +122,14 @@ class Player {
             $.each(this.inventory, function (index, value) {
                 if (value.type === 'fspell' || value.type === 'wspell'){
                     opn = "<option value='" + value.name + "'>" + value.name + " (" + value.minDam + "-" + value.maxDam + ")</option>";
+                    $(id).append(opn);
+                }
+            });
+        }
+        if (typ === "selectLektvary"){
+            $.each(this.inventory, function (index, value) {
+                if (value.type === 'potion'){
+                    opn = "<option value='" + value.name + "'>" + value.name + " (" + value.effect + ")</option>";
                     $(id).append(opn);
                 }
             });

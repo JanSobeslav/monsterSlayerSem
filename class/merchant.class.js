@@ -555,48 +555,56 @@ class Merchant {
             {
                 name: 'Malý lektvar zdraví',
                 type: 'potion',
+                t: 0,
                 effect: 10,
                 itemValue: 50
             },
             {
                 name: 'Střední lektvar zdraví',
                 type: 'potion',
+                t: 0,
                 effect: 50,
                 itemValue: 150
             },
             {
                 name: 'Velký lektvar zdraví',
                 type: 'potion',
+                t: 0,
                 effect: 200,
                 itemValue: 500
             },
             {
                 name: 'Lektvar života',
                 type: 'potion',
+                t: 0,
                 effect: 1000,
                 itemValue: 2000
             },
             {
                 name: 'Malý lektvar many',
                 type: 'potion',
+                t: 1,
                 effect: 10,
                 itemValue: 30
             },
             {
                 name: 'Střední lektvar many',
                 type: 'potion',
+                t: 1,
                 effect: 50,
                 itemValue: 90
             },
             {
                 name: 'Velký lektvar many',
                 type: 'potion',
+                t: 1,
                 effect: 200,
                 itemValue: 250
             },
             {
                 name: 'Lektvar magické síly',
                 type: 'potion',
+                t: 1,
                 effect: 1000,
                 itemValue: 1500
             },
